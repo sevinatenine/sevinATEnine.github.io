@@ -1,0 +1,25 @@
+{
+  "name": "sevinatenine-alt.github.io",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sevinatenine/sevinATEnine.github.io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/sevinatenine/sevinATEnine.github.io/issues"
+  },
+  "homepage": "https://github.com/sevinatenine/sevinATEnine.github.io#readme",
+  "dependencies": {
+    "pocketbase": "^0.26.6"
+  }
+}

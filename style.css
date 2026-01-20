@@ -1,100 +1,226 @@
+/* :root {
+    --body-bg: #455358;
+    --body-color: rgb(252, 239, 249);
+    --body-hover-bg: #535657;
+    --second-hover-bg: #00A676;
+    --second-bg: #4f646f;
+    --third-bg: rgb(149, 215, 174);
+    --third-hover-bg: #f1f1f1;
+} */
+
 :root {
-        --body-bg: #455358;
-        --body-color: rgb(252, 239, 249);
-        --body-hover-bg: #535657;
-        --second-hover-bg: #00A676;
-        --second-bg: #4f646f;
-        --third-bg: rgb(149, 215, 174);
-        --third-hover-bg: #f1f1f1;
-    }
+    --body-bg: #374955;        /* slightly deeper, richer dark blue-gray */
+    --body-color: #F5F5F5;     /* brighter off-white for readability */
+    --body-hover-bg: #4A5A65;  /* hover a bit brighter than bg */
+    --second-bg: #56737D;      /* sidebar/nav background, slightly more saturated */
+    --second-hover-bg: #00B288;/* accent green for hover */
+    --third-bg: #4DD0E1;       /* modern turquoise for widgets/buttons */
+    --third-hover-bg: #AEEEEE; /* lighter turquoise for hover states */
+}
 
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Roboto, Arial, Sans-Serif;
-      color: var(--body-color);
-      background-color: var(--body-bg);
-    }
-    
-    h2, p {
-      margin: 10px;
-    }
-    
-    ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background-color: var(--second-bg);
-    }
-    
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Roboto, Arial, Sans-Serif;
+    color: var(--body-color);
+    background-color: var(--body-bg);
+    padding-bottom: 50px;
+}
+
+h2, p {
+    margin: 10px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: var(--second-bg);
+}
+
+li {
+    float: left;
+}
+
+li a, .dropbtn {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover, .dropdown:hover .dropbtn {
+    background-color: var(--second-hover-bg);
+}
+
+li.dropdown {
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--third-bg);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {
+    background-color: var(--third-hover-bg);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+h3 {
+    margin-left: 20px;
+}
+
+h3::before {
+    content: ">>> ";
+    color: orange;
+    font-weight: bold; /* optional, makes it stand out more */
+    margin-right: 4px; /* optional spacing between >>> and text */
+}
+
+.title {
+    color: white;
+}
+
+.title::after {
+    content: "_";
+    animation: blink 1s step-start infinite;
+    color: #39FF14; /* neon green cursor */
+    margin-left: 2px;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }    /* invisible half the time */
+}
+
+.float-right {
+    float: right;
+}
+
+#footer {
+    background-color: var(--second-bg);
+    height: 50px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 10px;
+    box-sizing: border-box; /* ensures padding doesn’t exceed width */
+}
+
+body {
+    font-size: 16px; /* base font size */
+}
+
+p, a {
+    font-size: 1em; /* 16px, same as body */
+}
+
+h2 {
+    font-size: 2em; /* 32px, 2 × 16px */
+}
+
+h3 {
+    font-size: 1.5em; /* 24px, 1.5 × 16px */
+}
+
+main {
+    padding: 20px;
+}
+
+@media screen and (max-width: 600px) {
     li {
-      float: left;
+        float: none;
+        width: 100%;
     }
-    
-    li a, .dropbtn {
-      display: inline-block;
-      color: white;
-      text-align: center;
-      padding: 14px 16px;
-      text-decoration: none;
-    }
-    
-    li a:hover, .dropdown:hover .dropbtn {
-      background-color: var(--second-hover-bg);
-    }
-    
-    li.dropdown {
-      display: inline-block;
-    }
-    
+
     .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: var(--third-bg);
-      min-width: 160px;
-      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-      z-index: 1;
+        position: relative;
     }
-    
-    .dropdown-content a {
-      color: black;
-      padding: 12px 16px;
-      text-decoration: none;
-      display: block;
-      text-align: left;
-    }
-    
-    .dropdown-content a:hover {
-        background-color: var(--third-hover-bg);
-    }
-    
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
-    
-    h3 {
-        margin-left: 20px;
-    }
-    
-    h3::before {
-        content: ">>> ";
-        color: orange;
-        font-weight: bold; /* optional, makes it stand out more */
-        margin-right: 4px; /* optional spacing between >>> and text */
-    }
+}
 
-    .title {
-        color: white;
-    }
+.discord, .email {
+    color: #4dd0e1;
+    text-decoration: none;
+}
 
-    .title::after {
-        content: "_";           /* the underscore */
-        animation: blink 1s step-start infinite;  /* blinking animation */
-        color: white;           /* color of the underscore */
-        margin-left: 2px;       /* a little space after the text */
-    }
+.discord:hover, .email:hover {
+    color: var(--second-hover-bg);
+}
 
-    @keyframes blink {
-        50% { opacity: 0; }    /* invisible half the time */
-    }
+.projects {
+    border-radius: 6px;
+    padding: 10px;
+    min-width: 50%;
+    max-width: 100%;
+}
+
+.projects a {
+    padding: 0;
+    margin-left: 10px;
+    color: #4dd0e1;
+}
+
+.projects details {
+    display: block;       /* ensures block layout */
+    margin-bottom: 10px;  /* space below each details element */
+}
+
+.projects summary {
+    margin-bottom: 8px;  /* space between title and description */
+    cursor: pointer;      /* makes it clear you can click */
+}
+
+.projects a:hover {
+    background-color: transparent;
+    color: var(--second-hover-bg);
+}
+
+.projects li {
+    float: none;        /* cancel floating */
+    display: block;     /* ensure each item takes full width */
+    margin-bottom: 10px; /* optional spacing between items */
+}
+
+.content-wrapper {
+    display: flex;
+    gap: 20px; /* space between content and sidebar */
+    padding: 20px;
+}
+
+/* Main content takes most of the width */
+.main-content {
+    flex: 1; /* fill remaining space */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px; /* fixed width */
+    flex-shrink: 0; /* don't shrink */
+    background-color: var(--second-bg);; /* slightly different dark shade */
+    padding: 10px;
+    border-radius: 6px;
+}
+
+/* Make sidebar sticky when scrolling */
+.sidebar {
+    position: sticky;
+    top: 20px;
+}

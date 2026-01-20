@@ -7,29 +7,93 @@
 
     <body>
 
-        <ul>
+        <ul class="nav">
             <li><a href="#home">Home</a></li>
-            <li><a href="#news">About</a></li>
-            <li class="dropdown">
+            <li><a href="#news">Blog</a></li>
+            <!-- <li class="dropdown">
                 <a class="dropbtn">Projects</a>
                 <div class="dropdown-content">
                     <a href="#">Link 1</a>
                     <a href="#">Link 2</a>
                     <a href="#">Link 3</a>
                 </div>
-            </li>
+            </li> -->
         </ul>
 
         <main>
 
-            <h2 class="title">sevinatenine</h2>
-            <h3>About</h3>
+            <div class="content-wrapper">
+                <div class="main-content">
+                    <h2 class="title">sevinatenine</h2>
+
+                    <h3>About</h3>
+
+                    <p>Hi, I’m sevinatenine — a hacker, coder, and tinkerer who loves building projects. I create websites with HTML & React, develop apps, and write Python scripts. I also program in C/C++ and am currently learning Rust.</p>
+                    <p>On the hardware side, I work with Arduino, ESP32, and Raspberry Pi to bring ideas to life. I’m passionate about retro tech and collect classic machines like the Macintosh SE, Commodore 64, and NES.</p>
+
+                    <h3>Projects</h3>
+                    <ul class="projects">
+                        <li>
+                            <details>
+                                <summary><strong>Arduino Weather Station</strong></summary>
+                                <p>Epcot is a theme park at Walt Disney World Resort featuring exciting attractions, international pavilions, award-winning fireworks and seasonal special events.</p>
+                                <a href="https://github.com/sevinatenine/arduino-weather" target="_blank">GitHub</a>
+                            </details>                    
+                        </li>
+                        <li>
+                            <details>
+                                <summary><strong>Arduino Weather Station</strong></summary>
+                                <p>Epcot is a theme park at Walt Disney World Resort featuring exciting attractions, international pavilions, award-winning fireworks and seasonal special events.</p>
+                                <a href="https://github.com/sevinatenine/arduino-weather" target="_blank">GitHub</a>
+                            </details>                    
+                        </li>
+                        <li>
+                            <details>
+                                <summary><strong>Arduino Weather Station</strong></summary>
+                                <p>Epcot is a theme park at Walt Disney World Resort featuring exciting attractions, international pavilions, award-winning fireworks and seasonal special events.</p>
+                                <a href="https://github.com/sevinatenine/arduino-weather" target="_blank">GitHub</a>
+                            </details>                    
+                        </li>
+                        <li>
+                            <details>
+                                <summary><strong>Arduino Weather Station</strong></summary>
+                                <p>Epcot is a theme park at Walt Disney World Resort featuring exciting attractions, international pavilions, award-winning fireworks and seasonal special events.</p>
+                                <a href="https://github.com/sevinatenine/arduino-weather" target="_blank">GitHub</a>
+                            </details>                    
+                        </li>
+                    </ul>
+
+                    <h3>Contact</h3>
+
+                    <p>Discord server: <a class="discord">Join</a>
+                    </p>
+                    <p>
+                        Email: <a class="email"></a>
+                    </p>
+
+                    <a href="https://github.com/sevinatenine">
+                        <img width="500px" src="https://github-widgetbox.vercel.app/api/profile?username=sevinatenine&data=followers,repositories,stars,commits&theme=nautilus">
+                    </a>
+                </div>
+                
+                <aside class="sidebar">
+                    <h1>hi</h1>
+                </aside>
+            </div>
 
         </main>
 
-        <div id="sfckqy8e5mbea5gct6p4w3lkbgk1lnanuea"></div>
-        <img src="https://counter1.optistats.ovh/private/freecounterstat.php?c=kqy8e5mbea5gct6p4w3lkbgk1lnanuea" border="0"
-            title="website counter" alt="website counter">
+        <div id="footer">
+            <img src="https://counter1.optistats.ovh/private/freecounterstat.php?c=kqy8e5mbea5gct6p4w3lkbgk1lnanuea" class="float-right" border="0" title="website counter" alt="website counter">
+        </div>
+
+        <script>
+            document.querySelector(".discord").href = "https://discord.gg/TWtDqQuW";
+
+            document.querySelector(".email").innerText = "simon." + "robot312" + "@gmail.com";
+            document.querySelector(".email").href = "mailto:simon." + "robot312" + "@gmail.com";
+        </script>
+
     </body>
 
 </html>
