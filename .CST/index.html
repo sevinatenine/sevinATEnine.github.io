@@ -1,0 +1,477 @@
+<!----------------------------------------------------------------------------------------------------
+
+The following document is owned by:
+@sevinATEnine (and alt) @Cesium72 @tacocat15 and @cmsmith02
+
+It is under the Creative Commons license and may not be reproduced commercially or without
+direct permission from the authors.
+
+Other files linked to this repository, with the exception of some of the assets, also hold
+the same criteria.
+
+---------------------------------------------------------------------------------------------------->
+
+<!DOCTYPE html>
+<head>
+  
+  <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
+  <meta name="robot" content="noindex">
+  <title>CST Login</title>
+  <!-- Just some test content -->
+  <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
+  <style>
+  body {
+    padding: 0px;
+    overflow-x: hidden;
+    margin:0px;
+    color:white;
+  }
+    * {
+      font-family: "Lucida Console", "Menlo", "Monaco", "Courier", monospace;
+      box-sizing: border-box;
+    }
+    input[type="file"] {
+      margin:10px 0pxs;
+      display:none;
+    }
+    #ctxmenu {
+    position: fixed;
+    background: ghostwhite;
+    color: black;
+    cursor: pointer;
+    border: 1px black solid
+  }
+
+  #ctxmenu > p {
+    padding: 0 1rem;
+    margin: 0
+  }
+
+  #ctxmenu > p:hover {
+    background: black;
+    color: ghostwhite
+  }
+    header {
+      background-image: linear-gradient(60deg, black, #4444ff);
+      position: absolute;
+      width:100vw;
+      left:0px;
+      top: 5vh;
+      height:60vh;
+      color:white;
+      text-align:center;
+    }
+
+    
+    h1 {
+      font-size:4rem;
+      line-height:0px;
+    }
+    main {
+      position: absolute;
+      width: 100%;
+      top: 65vh;
+      padding:1vw;
+      background-color:#444444;
+    }
+    nav {
+      text-align: center;
+      color:white;
+      background-color:black;
+      position:fixed;
+      width:100%;
+      top:0px;
+      left:0px;
+      height:5vh;
+      padding:6px;
+      z-index:3;
+    }
+    nav a {
+      text-transform:uppercase;
+    }
+    .cardhold {
+      width:60vw;
+      margin-left:20vw;
+      display:grid;
+      grid-template-columns:auto auto auto;
+    }
+    .cardhold div {
+      border-radius:8px;
+      width:19vw;
+      border:1px solid white;
+    }
+    .cardhold div h2 {
+      text-align:center;
+    }
+    .cardhold div p {
+      width:17vw;
+      display:block;
+      word-break: break-word;
+      margin-left:1vw;
+      text-align:center;
+    }
+    .cardhold div hr {
+      width:7vw;
+    }
+    .cardhold div[onclick] {
+      scale:1;
+      z-index:1;
+      rotate:0deg;
+      transition:all linear 70ms;
+    }
+    .cardhold div[onclick]:hover {
+      scale:1.2;
+      z-index:2;
+      rotate:5deg;
+      cursor:pointer;
+      background-color:#44444498;
+    }
+    a {
+      color:white;
+    }
+    .counterimg {
+      float:center;
+    }
+    input,textarea {
+      resize:none;
+      width:50%;
+      color:white;
+      background-color:#444444;
+      border:1px solid white;
+      outline:none;
+      border-radius:4px;
+    }
+    #personStat {
+      position: fixed;
+      top: 0px;
+      right: 0px;
+      width: 130px;
+      height: 5vh;
+      color: white;
+      padding: 5px;
+      z-index: 10000;
+      padding-top: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #272525;
+    }
+    #personImg {
+      margin-left: 8px;
+      margin-right: 3px;
+    }
+    
+  </style>
+</head>
+<section id="personStat"><span id="usernameDisplay"></span> <img id="personImg" src="./assets/person-circle.svg" width="25px"></section>
+<body onload="initial();">
+  <noscript><h2>Note: JavaScript is disabled in your browser. Please enable it for terminal functionality.</h2></noscript>
+  <nav>
+    <a href="./login.html" id="loginTerminalTab">login</a>&bull;<a href="./MessagingSystem2/browse.php">messaging</a>&bull;<a href="./admin-login.php">admin login</a>&bull;<a href="./getLoginAttempts.php">login attempts</a>&bull;<a href="./docs/docs.html#intro">docs</a><span id="signOutButton">&bull;<a onclick="sessionStorage.removeItem('userTerminalCST');sessionStorage.removeItem('permittedTerminalCST');sessionStorage.removeItem('googleLogin');window.location='';" style="text-decoration: underline; cursor: pointer;">sign out</a></span>
+  </nav>
+  
+  <header>
+  <h1 style="margin-top:26vh;">CST</h1>
+  <h2>An in-browser command line</h2>
+  </header>
+  <main>
+    <h2 style="text-align:center;color:white;">Why CST?</h2>
+    <div class="cardhold">
+    <div>
+      <h2>Simple</h2>
+      <hr>
+      <p>CST has a basic syntax and is very easy to learn. Start off on the right foot by checking out our <a href="./docs/docs.html">docs</a>.</p>
+    </div>
+    <div>
+      <h2>Powerful</h2>
+      <hr>
+      <p>CST implements commands that can perform complex tasks at your fingertips. Pack power into every command using arrays, storage, files, and file execution.</p>
+    </div>
+    <div>
+      <h2>Versatile</h2>
+      <hr>
+      <p>
+        From data handling to tab managing, CST can do anything along the way. With the ability to run external languages such as HTML, CSS, and JavaScript, the possibilities are limitless.
+      </p>
+    </div>
+    </div>
+  <div>
+    <h1>Recent changes:</h1>
+    <p>Terminal last updated <span id="lastUpdatedOn">[LOADING...]</span></p>
+    
+    <script>
+    if (window.sessionStorage.permittedTerminalCST!==undefined) {
+      
+      
+      document.getElementById('signOutButton').style.display = "inline";
+      document.getElementById('signOutButton').removeAttribute("hidden");
+      if (window.sessionStorage.googleLogin === "true") {
+        document.getElementById('loginTerminalTab').innerHTML = 'terminal';
+        document.getElementById('loginTerminalTab').href = `./terminal.html?loginType=google&loginData=${window.sessionStorage.userTerminalCST }`;
+      } else {
+        document.getElementById('loginTerminalTab').innerHTML = 'terminal';
+        document.getElementById('loginTerminalTab').href = './terminal.html';
+      }
+      document.getElementById('usernameDisplay').innerHTML = window.sessionStorage.userTerminalCST;
+    } else {
+      document.getElementById('usernameDisplay').innerHTML = 'Sign in';
+      
+      document.getElementById('signOutButton').setAttribute("hidden", "");
+      document.getElementById('signOutButton').style.content = "";
+      
+    }
+    </script>
+  <script>
+  
+
+    window.setInterval(updateTime, 1000);
+
+    function updateTime() {
+
+    getText('https://api.github.com/repos/sevinATEnine-alt/sevinATEnine-alt.github.io/commits?per_page=1');
+
+    async function getText(file) {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", file);
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          // The request was successful.
+          var content = new Date((JSON.parse(String(xhr.responseText))[0].commit.author.date));
+          // console.log(content);
+          document.getElementById('lastUpdatedOn').innerHTML=timeText(content, new Date)
+        } else {
+          // The request failed.
+        }
+      };
+      xhr.send();
+    }
+
+    function timeText(a,b) {
+      var monthDiff = Math.abs(a.getMonth() - b.getMonth());
+      var dayDiff = Math.abs(a.getDay() - b.getDay());
+      var hourDiff = Math.abs(a.getHours() - b.getHours());
+      var minuteDiff = Math.abs(a.getMinutes() - b.getMinutes());
+      var secondDiff = Math.abs(a.getSeconds() - b.getSeconds());
+      var outString = 'right now';
+      // console.log(monthDiff);
+      // console.log(dayDiff);
+      // console.log(hourDiff);
+      // console.log(minuteDiff);
+      // console.log(secondDiff);
+
+      if (monthDiff > 1) {
+        outString = `${monthDiff} months ago.`;
+      } else if (monthDiff === 1) {
+        outString = `a month ago.`;
+      } else {
+
+        if (dayDiff > 1) {
+          outString = `${dayDiff} days ago.`;
+        } else if (dayDiff === 1) {
+          outString = `a day ago.`;
+        } else {
+
+          if (hourDiff > 1) {
+            outString = `${hourDiff} hours ago.`;
+          } else if (hourDiff === 1) {
+            outString = `an hour ago.`;
+          } else {
+
+            if (minuteDiff > 1) {
+              outString = `${minuteDiff} minutes ago.`;
+            } else if (minuteDiff === 1) {
+              outString = `a minute ago.`;
+            } else {
+              var outString = 'less than a minute ago.';
+            }
+          }
+        }
+      }
+
+      return outString;
+    }
+  }
+
+  </script>
+    <ul>
+    <li>Styling redone</li>
+    <li>New messaging system added at https://hobbyrobot.com/cst/MessagingSystem2/browse.php</li>
+    <li><big>GitHub automatically uploads new code, on push to <a src="https://hobbyrobot.com/cst/index.html">https://hobbyrobot.com/cst/index.html</a> via. FTP</big></li>
+    <li><b>DEVS ONLY</b>: WsU9d0162Cey!'Npw6foU&commat;gsMm(wx95~o6K*kiUtn76z!Cs0RsvrK$dkzJ~!up@Ct#6l36p1Cj99~oMn^hh3@~qn21Cr^4as4CXsy%RsvrK&hg#wsNpz1hDL)1*DK6qx9RsvrKaFD00dzq</li>
+    <li>Added PGP encrypter/decrypter</li>
+    <li>Ads are now working! =D</li>
+    <li><b>Login is now working for all users! =D</b></li>
+    <li>Samil's account is now working with username: 'samil' and password: '123'</li>
+    </ul>
+
+  </div>
+  <br>
+  <br>
+  <h1>Other Resources</h1>
+  <div class="cardhold">
+    <div onclick="go('./pgp.html')">
+      <h2>PGP</h2>
+      <hr>
+      <p>Encrypt text and data securely using our PGP encrypter/decrypter. Simply plug in the data to encrypt or decrypt and the key, and click a button!</p>
+    </div>
+    <div onclick="go('./browserData.html')">
+      <h2>Browser Data</h2>
+      <hr>
+      <p>Look through the secret peephole into your browser by discovering every statistic of your browser, including cookie information, browser version, and browser ancestor!</p>
+    </div>
+    <div onclick="go('./createLib.html')">
+      <h2>Library Creater</h2>
+      <hr>
+      <p>Create publicly accessible libraries to run in the CST Terminal! Libraries must be written in CST. Try using the guess-game library on the command line by typing "import guess-game" at the command prompt.</p>
+    </div>
+  </div>
+  <h1>Report an issue</h1>
+  <form action="submitIssue.php" method="get">
+    Username<br/><input name="issueUser" type="text" class="issueInput"><br>
+    Message<br/> <textarea name="issueBody" type="text" class="issueInput"></textarea><br>
+    <input onclick="this.style='display: hidden;cursor:pointer;'" type="submit" value="Submit" class="issueInput" id="submitIssueButton">
+
+  </form>
+  <br>
+  
+  <script>
+    if (window.localStorage.getItem('issuesSubmited')==undefined || window.localStorage.getItem('issuesSubmited')=="" || window.localStorage.getItem('issuesSubmited')==null) {
+      window.localStorage.setItem('issuesSubmited', JSON.stringify({"times":0, "expires": new Date().getDate()}))
+    }
+
+    if ((new Date().getDate())>=(parseInt((JSON.parse(window.localStorage.getItem('issuesSubmited')))['expires']))) {
+      window.localStorage.setItem('issuesSubmited', JSON.stringify({"times":0, "expires": new Date().getDate()}))
+    }
+
+    if ((parseInt((JSON.parse(window.localStorage.getItem('issuesSubmited')))['times']))>2) {
+      document.getElementById('submitIssueButton').disabled = true;
+      
+    } else {
+      document.getElementById('submitIssueButton').disabled = false;
+    }
+    document.write(((parseInt((JSON.parse(window.localStorage.getItem('issuesSubmited')))['times']))+"/3 issues submited today"))
+
+  </script>
+  <hr>
+
+   <!-- USER COUNTER -->
+  
+   <a href='https://www.free-counters.org/'>www.free-Counter.org</a> <script type='text/javascript' src='https://www.freevisitorcounters.com/auth.php?id=ab1ff6ceb029b079314e09d7015cf0a379bcc55e'></script>
+   <script type="text/javascript" src="https://www.freevisitorcounters.com/en/home/counter/1096544/t/10"></script>
+   <hr>
+  <script>
+
+
+    function randomIntFromInterval(min, max) { // min and max included 
+      return Math.floor(Math.random() * (max - min + 1) + min)
+    }
+
+    // async function setAdSRC() {
+    //   document.getElementsByClassName('adImg')[1].src=("./assets/ads/ad"+randomIntFromInterval(0,7)+".gif");
+    //   document.getElementsByClassName('adImg')[2].src=("./assets/ads/ad"+randomIntFromInterval(0,7)+".gif");
+    // }
+
+    // setAdSRC();
+
+  </script>
+
+  <script>
+
+    // if (window.localStorage.showAds=="false"){
+    //   document.getElementsByClassName('adBox')[0].style.visibility="hidden";
+    //   document.getElementsByClassName('adBox2')[0].style.visibility="hidden";
+    //   document.getElementsByClassName('adBox3')[0].style.visibility="hidden";
+
+    //   var showAdsButton = document.createElement('button');
+    //   showAdsButton.innerHTML="Show ads";
+    //   showAdsButton.setAttribute('onclick', "window.localStorage.showAds='true'; navigation.reload();");
+    //   document.body.appendChild(showAdsButton);
+    // } else {
+    //   window.localStorage.showAds="true";
+    //   var showAdsButton = document.createElement('button');
+    //   showAdsButton.innerHTML="Hide ads";
+    //   showAdsButton.setAttribute('onclick', "window.location='./removeAds.html'");
+    //   document.body.appendChild(showAdsButton);
+    // }
+  </script>
+
+
+  <script>
+    function hackerOveride(time) {
+      window.alert(`Error 657 at ${time}: Could not use hacker override as you do not have valid auth.`);
+    }
+
+    function loginAsRoot() {
+      while (window.prompt("Enter password >")!=="nuculear_explosion!!!") {
+        window.alert('Invalid');
+      }
+      window.sessionStorage.userTerminalCST="root";
+      window.sessionStorage.permittedTerminalCST="affirmed";
+      window.location="./terminal.html";
+    }
+
+    // function makeMenu(e) {
+    //   var menuOpened=document.createElement('div');
+    //   menuOpened.innerHTML="<p onclick='hackerOveride(String(new Date));'>Hacker Overide</p><p onclick='loginAsRoot();'>Root Login</p><p>Option 3</p>";
+    //   menuOpened.id="ctxmenu";
+    //   menuOpened.style=`position: fixed !important; left: ${e.clientX}px !important; top: ${e.clientY}px !important;`;
+    //   menuOpened.className="contextMenuOveride";
+    //   console.log(((e.clientX+"px;")+","+(e.clientY+"px;")));
+
+    //   document.body.appendChild(menuOpened);
+    // }
+
+  if (document.addEventListener) {
+    document.addEventListener('contextmenu', function(e) {
+      try {
+      document.body.removeChild(document.querySelectorAll('.contextMenuOveride')[0]);
+    } catch {}
+      makeMenu(e);
+
+      e.preventDefault();
+    }, false);
+  } else {
+    document.attachEvent('oncontextmenu', function() {
+      try {
+      document.body.removeChild(document.querySelectorAll('.contextMenuOveride')[0]);
+      } catch {}
+      makeMenu(e);
+
+      window.event.returnValue = false;
+    });
+  }
+  document.addEventListener('click', function() {
+    console.log('click');
+    try {
+      document.body.removeChild(document.querySelectorAll('.contextMenuOveride')[0]);
+    } catch {}
+    }, false);
+    
+    function go(url) {
+      location.replace(url)
+    }
+  </script>
+
+
+  <script>
+    var loc = window.location.href+'';
+    if (loc.indexOf('http://')==0){
+        window.location.href = loc.replace('http://','https://');
+    }
+    if (loc.indexOf('http://')==0){
+        window.location.href = loc.replace('http://','https://');
+    }
+    
+  </script>
+
+  </main>
+
+
+  <!-- USER BLOCKER-->
+
+  <script src="./UserBlocker/main.js" id="SAVE-ME!"></script>
+
+
+</body>
+
+

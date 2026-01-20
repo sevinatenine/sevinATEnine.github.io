@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .cameraFeed {
+            border: 4px solid black;
+            padding: 3px;
+            width: fit-content;
+            min-width: 320px;
+        }
+        img {
+            border: 4px solid black;
+            padding: 3px;
+
+        }
+        #download-cont {
+            border: 4px solid black;
+            padding: 3px;
+            width: fit-content;
+            min-width: 320px;
+        }
+        .right-float {
+            float: right;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    
+</head>
+<body>
+    <div class="cameraFeed">
+        <span class="text">
+            <span id="fps"></span> FPS
+            <span class="right-float" id="time">[TIME]</span>
+        </span>
+    </div>
+    <div id="out"></div>
+    <div id="download-cont"><a id="download-link" href="">Download current frame</a></div>
+    <script src='/socket.io/socket.io.js'></script>
+    
+    <script>
+        var socket = io();
+        
+        var active = {};
+
+        var lastMS = Date.now();
+
+        socket.on('userConnect', function(data) {
+            document.body.innerHTML += (data + ' joined<br>');
+            active[data] = '';
+        });
+
+        socket.on('cameraTick', function(data) {
+            // console.log(data);
+            active[data.id] = data.msg.url;
+
+            if(document.querySelector(('#out img[id="'+data.id+'"]')) == null) {
+                var a = document.createElement('img');
+                a.src = data.msg.url;
+                a.setAttribute('id', data.id);
+                document.getElementById('out').appendChild(a);
+            } else {
+                document.querySelector(('#out img[id="'+data.id+'"]')).src = data.msg.url;
+            }
+
+            document.getElementById('download-link').href = data.msg.url;
+            document.getElementById('download-link').setAttribute('download', '');
+
+            console.log(data.msg.ms);
+
+            document.getElementById('fps').innerHTML = Math.round((1000/Math.abs(lastMS - data.msg.ms)));
+            document.getElementById('time').innerHTML = new Date(data.msg.ms).toGMTString().split('').reverse().slice(4).reverse().join('') + '.' + new Date(data.msg.ms).getMilliseconds();
+
+
+            lastMS = data.msg.ms;
+
+        });
+
+        socket.on('userDisconnect', function(data) {
+            document.body.innerHTML += (data + ' left<br>');
+            delete active[data];
+        });
+
+        console.log(socket);
+    </script>
+</body>
+</html>

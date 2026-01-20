@@ -1,0 +1,276 @@
+<html>
+    <head>
+        <style>
+            * {
+                font-family: monospace;
+            }
+            
+            details > summary {
+                list-style: none;
+            }
+            details[open] > summary > .fileInfo > .arrow {
+                transform: rotate(45deg);
+            }
+
+            .arrow {
+                border: solid black;
+                border-width: 0 2px 2px 0;
+                display: inline-block;
+                padding: 3px;
+                transform: rotate(-45deg);
+            }
+
+            summary {
+                background:#fffaf2;
+            }
+
+            summary:hover {
+                background:#c7d2f2;
+            }
+
+            #sideBar {
+                width: 300px;
+                border-right: 2px solid black;
+                border-bottom: 2px solid black;
+                height: 79%;
+            }
+            
+
+
+            .fileInfo {
+                overflow: hidden;
+            }
+
+            #sideBar {
+                overflow: scroll;
+            }
+
+            .file {
+                background:#fffaf2;
+            }
+
+            .file:hover {
+                background:#c7d2f2;
+            }
+
+
+            .context-menu { 
+                position: absolute; 
+                text-align: center; 
+                background: lightgray; 
+                border: 1px solid black; 
+            } 
+    
+            .context-menu ul { 
+                padding: 0px; 
+                margin: 0px; 
+                min-width: 150px; 
+                list-style: none; 
+            } 
+    
+            .context-menu ul li { 
+                padding-bottom: 7px; 
+                padding-top: 7px; 
+                border: 1px solid black; 
+            } 
+    
+            .context-menu ul li a { 
+                text-decoration: none; 
+                color: black; 
+                font-size: large;
+            } 
+    
+            .context-menu ul li:hover { 
+                background: darkgray; 
+            } 
+
+            
+        </style>
+    </head>
+    <body>
+        <div id='sideBar' class='fileContent'>
+            <details>
+            <summary><span class='fileInfo'><img src='folder.svg' width='15px'> root <i class='arrow'></i></span></summary>
+            <span class="fileContent" location="root"></span>
+            </details>
+        </div>
+
+        <div></div>
+
+        <div id="contextMenu" class="context-menu" 
+        style="display:none"> 
+            <ul> 
+                <li><a href="#"><img src="code.svg" width="20px"> Rename</a></li> 
+                <li><a href="#"><img src="copy.svg" width="30px">Copy</a></li> 
+                <li><a href="#"><img src="delete.svg" width="30px">Delete</a></li> 
+                <li><a href="#"><img src="download.svg" width="20px"> Download</a></li> 
+                <li><a href="#"><img src="copy.svg" width="30px">Print</a></li> 
+
+            </ul> 
+        </div> 
+
+        <script>
+
+            var selected = null;
+            
+
+
+            document.onclick = hideMenu; 
+            document.querySelectorAll('details').forEach(e => e.oncontextmenu = rightClick); 
+    
+            function hideMenu() { 
+                document.getElementById( 
+                    "contextMenu").style.display = "none" 
+            } 
+    
+            function rightClick(e) { 
+                var loc = [];
+                // console.log();
+
+                var a = []; document.elementsFromPoint(e.x, e.y).forEach(e=>{
+                a.push(e);
+                });
+
+                var returnVal = false;
+
+                a.forEach(e => {if(e.tagName == 'DETAILS') {
+                    // console.log(e);
+                    // console.log([...e.children]);
+                    [...e.children].forEach(c => {if(c.tagName == 'SPAN') {
+                        // console.log(c.getAttribute('location'));
+
+                        loc.push(c.getAttribute('location'));
+                        returnVal = true;
+                        return;
+                     }});
+                     if (returnVal) {
+                        return;
+                     }
+                }})
+
+                var contextMenuLocation = loc[0];
+
+                console.log(contextMenuLocation);
+                
+
+
+                e.preventDefault(); 
+    
+                if (document.getElementById( 
+                    "contextMenu").style.display == "block") 
+                    hideMenu(); 
+                else { 
+                    var menu = document 
+                        .getElementById("contextMenu") 
+                        
+                    menu.style.display = 'block'; 
+                    menu.style.left = e.pageX + "px"; 
+                    menu.style.top = e.pageY + "px"; 
+                } 
+            } 
+
+
+
+            function makeFolder(name, location, deletable) {
+                try {
+                var loc = location.replace('//', '/');
+                
+                var html = `
+            <summary style='padding-left: ${loc.split("/").length*20}px;';><span class='fileInfo'><img src='folder.svg' width='15px'> ${name} <i class='arrow'></i></span></summary>
+            <span class="fileContent" location="${location}/${name}"></span>
+            `;
+                var details = document.createElement('details');
+                details.innerHTML = html;
+
+                document.querySelector(`span[location="${location}"]`).appendChild(details);
+                } catch(err) {
+                    if (String(err).startsWith("TypeError")) {
+                        window.alert(`INVALID FOLDER APPENDING\n\nCreating folder: ${name}\nIn: ${location}\n\n${location} does not exist. Please check for typos`);
+                    }
+                    document.write(err);
+                }
+            
+            }
+
+
+            function checkImage(imageSrc, good, bad) {
+                var img = new Image();
+                img.onload = good; 
+                img.onerror = bad;
+                img.src = imageSrc;
+            }
+
+
+            function removeOrAddIcons() {
+                try {
+                
+                } catch(err) {window.alert(err);}
+            }
+            
+
+            function makeFile(name, location, type, content, deletable) {
+                try {
+                var loc = location.replace('//', '/');
+                
+                checkImage(`${type.toLowerCase()}-file.svg`, good, bad);
+
+
+                
+
+                function good() {
+                    var html = `
+            <span style='padding-left: ${loc.split("/").length*20}px;';><img src='${type.toLowerCase()}-file.svg' width='15px'> ${name}</span>
+            `;
+                    makeFile(html);
+                }
+
+                function bad() {
+                    var html = `
+            <span style='padding-left: ${loc.split("/").length*20}px;';><img src='default-file.svg' width='15px'> ${name}</span>
+            `;
+                    makeFile(html);
+                }
+
+                function makeFile(html) {
+                    var details = document.createElement('div');
+                    details.innerHTML = html;
+                    details.onclick=function() {};
+                    details.className = 'file';
+
+                    document.querySelector(`span[location="${location}"]`).appendChild(details);
+                }
+                } catch(err) {
+                    if (String(err).startsWith("TypeError")) {
+                        window.alert(`INVALID FILE APPENDING\n\nCreating file: ${name}\nIn: ${location}\n\n${location} does not exist. Please check for typos`);
+                    }
+                    document.write(err);
+                }
+                
+            
+            }
+
+            makeFolder('shared', 'root', false);
+            makeFolder('users', 'root', false);
+            makeFolder('classified', 'root', false);
+            makeFolder('restricted', 'root/classified', false);
+            makeFolder('top secret', 'root/classified/restricted', false);
+            makeFolder('banned', 'root/classified/restricted/top secret', false);
+            makeFolder('confidential', 'root/classified/restricted/top secret/banned', false);
+            makeFolder('hacking', 'root/classified/restricted/top secret/banned/confidential', false);
+            makeFolder('$|m0n', 'root/users', false);
+            makeFolder('(@2v1n', 'root/users', false);
+            makeFolder('2uk3', 'root/users', false);
+            makeFolder('J@(k', 'root/users', false);
+
+            makeFile('test.txt', 'root/users/$|m0n', 'TXT', 'Hi!\nHello!\nIt works!\nYes!!!!\n\n:)', true)
+
+            removeOrAddIcons();
+            
+            
+
+
+
+
+        </script>
+    </body>
+</html>

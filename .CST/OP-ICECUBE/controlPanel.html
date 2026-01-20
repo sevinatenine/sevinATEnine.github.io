@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+body {margin:0;}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover:not(.active) {
+    background-color: #111;
+}
+
+.active {
+    background-color: #04AA6D;
+}
+
+table {
+    width: 420px;
+}
+td {
+    border: 2px solid black;
+}
+
+.circle[cirColor="green"] {
+    width: 15px;
+    height: 15px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    background: green;
+    display: inline-flex;
+    margin-left: 6px;
+}
+
+.circle[cirColor="red"] {
+    width: 15px;
+    height: 15px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    background: red;
+    display: inline-flex;
+    margin-left: 6px;
+}
+
+.circle[cirColor="blue"] {
+    width: 15px;
+    height: 15px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    background: skyblue;
+    display: inline-flex;
+    margin-left: 6px;
+}
+
+.circle[cirColor="orange"] {
+    width: 15px;
+    height: 15px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    background: orange;
+    display: inline-flex;
+    margin-left: 6px;
+}
+
+.circle[cirColor="yellow"] {
+    width: 15px;
+    height: 15px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    background: rgb(255, 204, 0);
+    display: inline-flex;
+    margin-left: 6px;
+}
+
+
+.circle[cirColor="undefined"] {
+    width: 15px;
+    height: 15px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    background: magenta;
+    display: inline-flex;
+    margin-left: 6px;
+}
+
+.smallButon {
+    width: 32%;
+    margin: .5%;
+    border: 1px solid black;
+    border-radius: 3px;
+    height: 40px;
+}
+
+.largeButton {
+    width: 98%;
+    margin: .5%;
+    border: 1px solid black;
+    border-radius: 3px;
+    height: 40px;
+}
+
+button:hover {
+    background-color: darkgray;
+    cursor: pointer;
+}
+
+button:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+}
+
+</style>
+</head>
+<body>
+
+<ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="devices.html" class="active">Devices</a></li>
+    <li><a href="chat.html">Chat</a></li>
+    <li><a href="status.html">Status</a></li>
+</ul>
+
+<div style="padding:20px;margin-top:30px;background-color:lightblue;height:1500px;">
+    <h1>Devices</h1>
+
+    <table colcount="3">
+        <tr><td colspan="3"><img width="400px" src="https://www.okdo.com/wp-content/uploads/2020/10/RPi-400-FRONT-WHITE-T2.png"></td></tr>
+        <tr><td colspan="3" style="text-align:center; background-color: green;">REGISTERED</td></tr>
+        <tr><td colspan="3" style="text-align:center; background-color: lightgoldenrodyellow;">Unarmed</td></tr>
+        <tr height="40px"><td colspan="1" style="text-align:center; background-color: lightskyblue;">Raspberry Pi 400</td><td colspan="1" style="text-align:center;">Device #0</td><td colspan="1" style="text-align:center;">Simon</td></tr>
+        <tr><td colspan="2" style="height: 200px;" id="statuses-0">
+            <span class="statusBar"><div class="circle" cirColor="red"></div> Off</span><br>
+            <span class="statusBar"><div class="circle" cirColor="red"></div> No Power</span><br>
+            <span class="statusBar"><div class="circle" cirColor="red"></div> No Network</span><br>
+            <span class="statusBar"><div class="circle" cirColor="red"></div> No SSH<br></span>
+            <span class="statusBar"><div class="circle" cirColor="red"></div> Not ready<br></span>
+            <span class="statusBar"><div class="circle" cirColor="red"></div> Unarmed<br></span>
+            <span class="statusBar"><div class="circle" cirColor="red"></div> Not detinated<br></span>
+
+        </td><td colspan="1" rowspan="2"><img width='150px' src="https://pi4j.com/1.3/images/pi4j-rpi-400-pinout.png"></td></tr>
+        <tr><td colspan="2">
+            <button class="smallButon" onclick="ping(0);">Ping</button><button class="smallButon" onclick="reboot(0);" disabled>Reboot</button><button class="smallButon" onclick="arm(0);" disabled>Arm</button><br>
+            <button class="largeButton"  onclick="detonate(0);"disabled>Detonate</button>
+        </td></tr>
+    </table>
+
+    
+    
+</div>
+
+<script>
+    function ping(item) {
+        var names = {
+            0: 'Raspberry Pi 400'
+        }
+
+        window.alert('Failed to ping: '+names[item]+' <Device #'+item+'>');
+    }
+
+    function updateStatus(item) {
+        var out = '';
+        fetch (('./getData.php?deviceId='+item))
+        .then(x => x.text())
+        .then(y => {
+            var a = document.getElementById(('statuses-'+item));
+            a.innerHTML = '';
+            colors = {
+                'Off':'red',
+                'Idle':'green',
+                'Busy':'orange',
+                'No Power':'red',
+                'Power':'green',
+                'No Network':'red',
+                'Network':'green',
+                'No SSH': 'blue',
+                'SSH': 'yellow',
+                'Unarmed': 'red',
+                'Armed':'orange',
+                'Not Detonated':'yellow',
+                'Detonated':'orange',
+                'Ready':'green',
+                'Not Ready':'red',
+            }
+            for (i in y.split(',').slice(1)) {
+                a.innerHTML += '<span class="statusBar"><div class="circle" cirColor="'+colors[y.split(',').slice(1)[i]]+'"></div> '+y.split(',').slice(1)[i]+'</span><br>';
+            }
+            
+        })
+        .catch(err => console.log(err));
+
+        
+
+        
+        
+    }
+</script>
+
+</body>
+</html>
+
+

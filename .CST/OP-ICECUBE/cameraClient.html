@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="start-camera">Start Camera</button>
+    <video id="video" width="320" height="240" autoplay></video>
+    <canvas id="canvas" width="320" height="240"></canvas>
+    <canvas id="canvas2" width="320" height="240"></canvas>
+    <div id="out"></div>
+
+    <script src='/socket.io/socket.io.js'></script>
+
+    <script>
+        var socket = io();
+        
+        function pixel(imageData, x, y) {
+            var index = (0*imageData.width + 0) * 4;
+            var red = imageData.data[index];
+            var green = imageData.data[index + 1];
+            var blue = imageData.data[index + 2];
+            var alpha = imageData.data[index + 3];
+            return [red, green, blue, alpha];
+        }
+
+
+        let camera_button = document.querySelector("#start-camera");
+        let video = document.querySelector("#video");
+        let click_button = document.querySelector("#click-photo");
+        let canvas = document.querySelector("#canvas");
+        let canvas2 = document.querySelector("#canvas2");
+        let out = document.querySelector("#out");
+
+
+        var prevData = [];
+
+        camera_button.addEventListener('click', async function() {
+            let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+            video.srcObject = stream;
+
+            window.setInterval(function() {
+            var context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+            let image_data_url = canvas.toDataURL('image/jpeg');
+
+            // console.log(imageData);
+
+            var pixelArray = imageData.data;
+            var motion = false;
+
+            var context2 = canvas2.getContext('2d');
+            context2.drawImage(video, 0, 0, canvas2.width, canvas2.height);
+            motion = true;
+            socket.emit('cameraTick', {
+                time: new Date(),
+                motion: Math.abs(pixelArray.reduce((partialSum, a) => partialSum + a, 0)-prevData.reduce((partialSum, a) => partialSum + a, 0)),
+                url: image_data_url,
+                pixelArray: pixelArray,
+                triggered: (Math.abs(pixelArray.reduce((partialSum, a) => partialSum + a, 0)-prevData.reduce((partialSum, a) => partialSum + a, 0)) > 20000),
+                ms: Date.now()
+            });
+                
+
+
+                
+
+            prevData = pixelArray;
+        }, 30);
+        });
+
+        
+    </script>
+</body>
+</html>

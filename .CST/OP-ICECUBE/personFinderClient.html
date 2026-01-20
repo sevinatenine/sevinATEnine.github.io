@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+        
+        socket.on('foundInfo', (data) => {
+            console.log(data);
+        });
+
+        socket.emit('startSearch', {
+            name: window.prompt('Enter name of target (leave blank if not applicable)'),
+            username: window.prompt('Enter username of target (leave blank if not applicable)'),
+            email: window.prompt('Enter email of target (leave blank if not applicable)'),
+            company: window.prompt('Enter company of target (leave blank if not applicable)'),
+            domain: window.prompt('Enter domain of target (leave blank if not applicable)'),
+            address: window.prompt('Enter address of target (leave blank if not applicable)'),
+        });
+    </script>
+</body>
+</html>

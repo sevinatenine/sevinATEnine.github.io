@@ -1,0 +1,465 @@
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <style>
+        * {
+            background-color: black;
+            color: white;
+            font-family: 'Roboto';
+        }
+        input {
+            background-color: grey;
+        }
+
+        input:disabled {
+            background-color: black !important;
+        }
+
+        .itemSold {
+            border: 1px solid grey;
+            padding: 10px;
+            width: fit-content;
+        }
+        .itemSoldName {
+            width: fit-content;
+        }
+        .itemSoldPrice {
+            width: fit-content;
+        }
+        #addItem {
+            border: 3px solid grey;
+            padding: 10px;
+            width: 249px;
+            background-color: rgb(56, 57, 57);
+            cursor: pointer;
+        }
+        #doneButton {
+            border: 3px solid grey;
+            padding: 10px;
+            width: 249px;
+            background-color: rgb(56, 57, 57);
+            cursor: pointer;
+        }
+        #addItem:hover {
+            background-color: rgb(105, 106, 106);
+
+        }
+        #doneButton:hover {
+            background-color: rgb(105, 106, 106);
+
+        }
+
+        #sendCont {
+            display: none;
+        }
+
+        #sendButton {
+            border: 3px solid grey;
+            padding: 10px;
+            width: 249px;
+            background-color: rgb(56, 57, 57);
+            cursor: pointer;
+        }
+        #sendButton:hover {
+            background-color: rgb(105, 106, 106);
+
+        }
+        #donateButton {
+            border: 3px solid grey;
+            padding: 10px;
+            width: 249px;
+            background-color: rgb(56, 57, 57);
+            cursor: pointer; 
+        }
+        #donateButton:hover {
+            background-color: rgb(105, 106, 106);
+
+        }
+
+        #dataDetails {
+            display: none;
+        }
+
+
+        #errormsg {
+            background-color: crimson;
+            padding: 20px;
+            padding-left: 43%;
+            border: 4px solid darkred;
+            position: fixed;
+            top:90%;
+            width: 100%;
+            display: none;
+        }
+        a {
+            color: rgb(4, 138, 255);
+        }
+        #donate {
+            border: 3px solid grey;
+            padding: 10px;
+            width: 30%;
+            height: 40%;
+            background-color: black;
+            z-index: top;
+            position: fixed;
+            top: 0px;
+            right: 0px;
+        }
+        #minerCont {
+            border: 3px solid grey;
+            padding: 10px;
+            width: 30%;
+            height: 40%;
+            background-color: black;
+            z-index: top;
+            position: fixed;
+            bottom: 0px;
+            right: 0px;
+        }
+        #minerContOverlay {
+            border: 3px solid darkred;
+            padding: 10px;
+            width: 30%;
+            height: 40%;
+            background-color: rgb(255, 0, 0);
+            z-index: 1;
+            position: fixed;
+            bottom: 0px;
+            right: 0px;
+            font-size: xx-large;
+            display: none;
+        }
+
+        #minerContCorrect {
+            border: 3px solid darkgreen;
+            padding: 10px;
+            width: 30%;
+            height: 40%;
+            background-color: green;
+            z-index: 1;
+            position: fixed;
+            bottom: 0px;
+            right: 0px;
+            font-size: xx-large;
+            display: none;
+        }
+
+        #timeLeft {
+            background-color: rgb(255, 0, 0);
+            font-size: xx-large;
+        }
+
+
+
+        .questionButton {
+            border: 3px solid grey;
+            padding: 10px;
+            width: 265px;
+            background-color: rgb(56, 57, 57);
+            cursor: pointer;
+            height: 130px;
+            margin-bottom: 5px;
+        }
+
+        .questionButton:hover {
+            background-color: rgb(105, 106, 106);
+
+        }
+
+
+
+        #passwordRequired {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: grey;
+            z-index: 0;
+            top:0px;
+            padding-top: 300px;
+            padding-left: 45%;
+            font-size: 30px;
+        }
+        #passwordRequired input {
+            margin-top: 10px;
+            font-size: 25px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Simon Money System&trade; - credit card charger UI</h1>
+    <h2>Store owner:</h2>
+    <span>Shop is owned by <span class="shopOwnerName">[NAME]</span> &lt;<span class="shopOwnerID">[ID]</span>&gt;</span>
+    <h3>Items sold:</h3>
+    <div id="allItems">
+        <div class="itemSold">
+            Item name &nbsp;<input class="itemSoldName" required><br>
+            Item price &nbsp;<input class="itemSoldPrice" type="text" oninput='calcPrice();' onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" ><br>
+        </div>
+    </div>
+    <br>
+    <button id="addItem" onclick="addItem();">Add item</button>
+    <br>
+    <hr>
+    <br>
+    Total: $<span id="totalPrice">0</span>
+    <br><br>
+    <button id="doneButton" onclick="chargeAccount(calcPrice(false));">Done</button>
+    <div id="sendCont">
+        <br>
+        <hr>
+        <br>
+        User ID &nbsp;<input id="usernameEntry" autocomplete="off"><br>
+        User password &nbsp;<input id="passwordEntry" type="password" autocomplete="off"><br>
+        <br>
+        <button id="sendButton" onclick="moneyTransaction(document.getElementById('usernameEntry').value, document.getElementById('passwordEntry').value, money=calcPrice());">Confirm purchase</button>
+        <br>
+        <hr>
+        <br>
+        <details id="dataDetails">
+            <summary>Sending...</summary>
+            &nbsp;&nbsp;&nbsp;&nbsp;Sending $<span id="detailsMoney">0</span> from <span id="customerName">[NAME]</span> &lt;<span id="customerID">[ID]</span>&gt; to the shop owner (<span class="shopOwnerName">[NAME]</span> &lt;<span class="shopOwnerID">[ID]</span>&gt;)
+        </details>
+    </div>
+
+    <div id="errormsg">
+        Invalid id/password.
+    </div>
+    <div id="donate">
+        <h2>Donate to user</h2>
+        User ID &nbsp;<input id="useridEntry" autocomplete="off"><br>
+        Ammount of money &nbsp;<input id="moneyammountEntry" autocomplete="off" type='text' onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" ><br><br>
+        <button id="donateButton" onclick="donate(document.getElementById('useridEntry').value, document.getElementById('moneyammountEntry').value);">Confirm purchase</button>
+    </div>
+
+    <div id="minerContCorrect">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&check; Correct!
+    </div>
+
+    <div id="minerContOverlay">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&times; Incorrect! <span id="timeLeft">3</span>
+    </div>
+
+    <div id="minerCont" onload="genQuestion('trivia');">
+        <h2>Mine money by answering questions!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$<span id="moneyEarned">0</span></h2>
+        <span id="currentQuestion">[LOADING QUESTION...]</span><br><br>
+        <div id="possibleAnswersCont">
+            <button id="questionAnswer0" onclick='answerQuestion(0);' class="questionButton">[LOADING ANSWER...]</button>
+            <button id="questionAnswer1" onclick='answerQuestion(1);' class="questionButton">[LOADING ANSWER...]</button>
+            <button id="questionAnswer2" onclick='answerQuestion(2);' class="questionButton">[LOADING ANSWER...]</button>
+            <button id="questionAnswer3" onclick='answerQuestion(3);' class="questionButton">[LOADING ANSWER...]</button>
+        </div>
+    </div>
+
+
+
+    <div id="passwordRequired">
+        Password required<br>
+        <input id='passwordRequiredInput' type="password" autocomplete="off" oninput="checkPassword(this.value);">
+    </div>
+    <script>
+        var passwordRequired = true;
+
+        document.addEventListener("visibilitychange", () => {
+            document.getElementById('passwordRequiredInput').value = '';
+            console.log('change')
+        });
+
+        window.setInterval(checkPass, 500);
+
+        function checkPass() {
+            passwordRequired=checkPassword(document.getElementById('passwordRequiredInput').value);
+            if (!passwordRequired) {
+                //// PASSWORD OFF \\\\
+                document.getElementById('passwordRequired').style.display='none';
+            } else {
+                document.getElementById('passwordRequired').style.display='none';
+            }
+        }
+
+        const queryString = new URLSearchParams(window.location.search);
+        document.querySelectorAll('.shopOwnerID')[0].innerHTML=queryString.get('id');
+        document.querySelectorAll('.shopOwnerName')[0].innerHTML=queryString.get('name');
+        document.querySelectorAll('.shopOwnerID')[1].innerHTML=queryString.get('id');
+        document.querySelectorAll('.shopOwnerName')[1].innerHTML=queryString.get('name');
+
+        var myId=queryString.get('id');;
+
+        function checkPassword(pass) {
+            const logins = {
+                '312':'TACOS',
+                '999':'hellohellohello',
+                '789':'Baba',
+                '2':'dad',
+                '1':'mom',
+            }
+
+            if (String(logins[myId])==String(pass)) {
+            }
+            return (logins[myId]==pass);
+        }
+
+
+
+
+        function addItem() {
+            var items = document.getElementById('allItems');
+            var node = document.createElement('div');
+            node.className='itemSold';
+            node.innerHTML=`Item name &nbsp;<input class="itemSoldName" required><br>
+            Item price &nbsp;<input class="itemSoldPrice" type="text" oninput='calcPrice();' onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" ><br>`;
+            items.appendChild(node);
+        }
+        function calcPrice(state=true) {
+            var items = document.querySelectorAll('.itemSold');
+            var total = 0;
+            for (item of items) {
+                if (!state) {
+                    item.getElementsByClassName('itemSoldPrice')[0].disabled = true;
+                    item.getElementsByClassName('itemSoldName')[0].disabled = true;
+                    document.getElementById('addItem').onclick='';
+                    document.getElementById('addItem').style.background='grey';
+                    document.getElementById('doneButton').onclick='';
+                    document.getElementById('doneButton').style.background='grey';
+                }
+                total += Number(item.getElementsByClassName('itemSoldPrice')[0].value);
+            }
+            document.getElementById('totalPrice').innerHTML=total;
+            return total;
+        }
+
+        function chargeAccount(money) {
+            document.getElementById('sendCont').style.display='block';
+        }
+
+        function moneyTransaction(fromId, fromPass, money, toId=myId) {
+            const logins = {
+                '312':'TACOS',
+                '999':'hellohellohello',
+                '789':'Baba',
+                '2':'dad',
+                '1':'mom',
+
+            }
+            const loginNames = {
+                '312':'Simon Wirz',
+                '999': 'Sawyer Wirz',
+                '789': 'Clara Wirz',
+                '2':'Dad Wirz',
+                '1':'Mom Wirz',
+            }
+
+            if (logins[fromId]===fromPass) {
+                document.getElementById('dataDetails').style.display='block';
+                document.getElementById('detailsMoney').innerHTML=money;
+                document.getElementById('errormsg').style.display='none';
+                document.getElementById('customerName').innerHTML=loginNames[fromId];
+                document.getElementById('customerID').innerHTML=fromId;
+
+                document.getElementById('usernameEntry').disabled = true;
+                document.getElementById('passwordEntry').disabled = true;
+
+                document.getElementById('sendButton').onclick='';
+                document.getElementById('sendButton').style.background='grey';
+
+                fetch('./charge.php?toId='+toId+'&fromId='+fromId+'&ammount='+money).then(response => response.text()).then(text => console.log(text)).catch(error => console.log(error))
+
+            } else {
+                document.getElementById('errormsg').style.display='block';
+            }
+        }
+
+        function donate(toId, money, fromId=myId) {
+            fetch('./charge.php?toId='+toId+'&fromId='+fromId+'&ammount='+money).then(response => response.text()).then(text => console.log(text)).catch(error => console.log(error));
+            document.getElementById('donateButton').onclick='';
+            document.getElementById('donateButton').style.background='grey';
+        }
+
+        function getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        var correctAnswer;
+
+        async function genQuestion(type) {
+            const response = await fetch("./miningQuestions.json");
+            const json = await response.json();
+            var current = json['trivia'][getRandomInt(0,(json['trivia'].length)-1)];
+            var correct = current.correct;
+
+            var container = document.getElementById("possibleAnswersCont");
+            var elementsArray = Array.prototype.slice.call(container.getElementsByClassName('questionButton'));
+                elementsArray.forEach(function(element){
+                container.removeChild(element);
+            })
+            shuffleArray(elementsArray);
+            
+            elementsArray.forEach(function(element){
+                container.appendChild(element);
+            })
+
+            correctAnswer = correct;
+            // console.log(current);
+            document.getElementById('currentQuestion').innerHTML=current.question;
+            var a0 = document.getElementById('questionAnswer0');
+            a0.innerHTML=current.possible[0];
+            var a1 = document.getElementById('questionAnswer1');
+            a1.innerHTML=current.possible[1];
+            var a2 = document.getElementById('questionAnswer2');
+            a2.innerHTML=current.possible[2];
+            var a3 = document.getElementById('questionAnswer3');
+            a3.innerHTML=current.possible[3];
+        }
+
+
+
+
+        function shuffleArray(array) {
+            for (var i = array.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+            return array;
+        }
+
+
+
+        function answerQuestion(answer) {
+            if (answer === correctAnswer) {
+                console.log('correct');
+                document.getElementById('minerContCorrect').style.display='block';
+                document.getElementById('minerContOverlay').style.display='none';
+                m = document.getElementById('moneyEarned');
+                m.innerHTML = (Number(m.innerHTML)+0.10).toFixed(1);
+                if((Number(m.innerHTML)*10)%10===0) {
+                    donate(myId, 1, 1);
+                }
+                window.setTimeout(function(){
+                    document.getElementById('minerContCorrect').style.display='none';
+                }, 500);
+            } else {
+                console.log('incorrect');
+                document.getElementById('minerContCorrect').style.display='none';
+                document.getElementById('minerContOverlay').style.display='block';
+                document.getElementById('timeLeft').innerHTML='3';
+                window.setTimeout(function(){
+                    document.getElementById('timeLeft').innerHTML='2';
+                    window.setTimeout(function(){
+                        document.getElementById('timeLeft').innerHTML='1';
+                        window.setTimeout(function(){
+                            document.getElementById('minerContOverlay').style.display='none';
+                        }, 1000);
+                    }, 1000);
+                }, 1000);
+            }
+            genQuestion('trivia');
+        }
+
+
+        genQuestion('trivia');
+    </script>
+</body>

@@ -1,0 +1,100 @@
+:root {
+        --body-bg: #455358;
+        --body-color: rgb(252, 239, 249);
+        --body-hover-bg: #535657;
+        --second-hover-bg: #00A676;
+        --second-bg: #4f646f;
+        --third-bg: rgb(149, 215, 174);
+        --third-hover-bg: #f1f1f1;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Roboto, Arial, Sans-Serif;
+      color: var(--body-color);
+      background-color: var(--body-bg);
+    }
+    
+    h2, p {
+      margin: 10px;
+    }
+    
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: var(--second-bg);
+    }
+    
+    li {
+      float: left;
+    }
+    
+    li a, .dropbtn {
+      display: inline-block;
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+    
+    li a:hover, .dropdown:hover .dropbtn {
+      background-color: var(--second-hover-bg);
+    }
+    
+    li.dropdown {
+      display: inline-block;
+    }
+    
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: var(--third-bg);
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+    }
+    
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      text-align: left;
+    }
+    
+    .dropdown-content a:hover {
+        background-color: var(--third-hover-bg);
+    }
+    
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    
+    h3 {
+        margin-left: 20px;
+    }
+    
+    h3::before {
+        content: ">>> ";
+        color: orange;
+        font-weight: bold; /* optional, makes it stand out more */
+        margin-right: 4px; /* optional spacing between >>> and text */
+    }
+
+    .title {
+        color: white;
+    }
+
+    .title::after {
+        content: "_";           /* the underscore */
+        animation: blink 1s step-start infinite;  /* blinking animation */
+        color: white;           /* color of the underscore */
+        margin-left: 2px;       /* a little space after the text */
+    }
+
+    @keyframes blink {
+        50% { opacity: 0; }    /* invisible half the time */
+    }
