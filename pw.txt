@@ -1,0 +1,5 @@
+const pw = await bcrypt.hash('BunnyFun23', 10)
+await AdminUser.create({
+  email: 'simon@wirz.com',
+  password:pw,
+})

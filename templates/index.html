@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>sevinatenine</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+
+        <ul class="nav">
+            <li><a href="/">Home</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <!-- <li class="dropdown">
+                <a class="dropbtn">Projects</a>
+                <div class="dropdown-content">
+                    <a href="#">Link 1</a>
+                    <a href="#">Link 2</a>
+                    <a href="#">Link 3</a>
+                </div>
+            </li> -->
+        </ul>
+
+        <main>
+
+            <div class="content-wrapper">
+                <div class="main-content" style="width: calc(100% - 20px);">
+                    <h1 class="title">sevinatenine</h1>
+
+                    <h3 class="orange">About</h3>
+
+                    <p>Hi, I’m sevinatenine — a hacker, coder, and tinkerer who loves building projects. I create websites with HTML & React, develop apps, and write Python scripts. I also program in C/C++ and am currently learning Rust.</p>
+                    <p>On the hardware side, I work with Arduino, ESP32, and Raspberry Pi to bring ideas to life. I’m passionate about retro tech and collect classic machines like the Macintosh SE, Commodore 64, and NES.</p>
+
+                    <h3 class="orange">Projects</h3>
+                    <ul class="projects">
+                        {projects_list}
+                    </ul>
+
+                    <h3 class="orange">Contact</h3>
+
+                    <p>Discord server: <a class="discord">Join</a>
+                    </p>
+                    <p>
+                        Email: <a class="email"></a>
+                    </p>
+
+                    <a href="https://github.com/sevinatenine">
+                        <img width="500px" src="https://github-widgetbox.vercel.app/api/profile?username=sevinatenine&data=followers,repositories,stars,commits&theme=nautilus">
+                    </a>
+
+                    <h3 class="orange">Buttons</h3>
+                    <h4>My button</h4>
+                    <span id="mybutton"></span>
+                    <h4>Buttons</h4>
+                    <div id="buttons">
+                        <a href="https://lisagui.com" target="_blank"><img src="https://lisagui.com/LisaGUI_88x31.gif" alt="LisaGUI" style="width:88px; height:31px; image-rendering:pixelated!important;" /></a>
+                        <iframe src="https://incr.easrng.net/badge?key=sevinatenine" style="background: url(//incr.easrng.net/bg.gif)" title="increment badge" width="88" height="31" frameborder="0"></iframe>
+                    </div>
+                    
+                    
+                </div>
+                
+                <aside class="sidebar">
+                    <h2>Blog posts</h2>
+                    <ul class="articles">
+                        {articles_list}
+                    </ul>
+                </aside>
+            </div>
+
+        </main>
+
+        <div id="footer">
+            <img src="https://counter1.optistats.ovh/private/freecounterstat.php?c=kqy8e5mbea5gct6p4w3lkbgk1lnanuea" class="plaque float-right" border="0" title="website counter" alt="website counter">
+        </div>
+
+        <script>
+            document.querySelector(".discord").href = "https://discord.gg/TWtDqQuW";
+
+            document.querySelector(".email").innerText = "simon." + "robot312" + "@gmail.com";
+            document.querySelector(".email").href = "mailto:simon." + "robot312" + "@gmail.com";
+
+            function copyContent() {
+
+                console.log('copying');
+                // Get the text from the paragraph element
+                const text = document.getElementById("code").innerText;
+
+                // Use the Clipboard API to write the text to the clipboard
+                navigator.clipboard.writeText(text)
+                .then(() => {
+                    // Success feedback (optional)
+                    alert("Copied!");
+                })
+                .catch(err => {
+                    // Error handling (optional)
+                    console.error('Failed to copy text: ', err);
+                });
+            }
+
+            
+            document.getElementById("mybutton").innerHTML = `<p>My 88x31 button! Feel free to embed in your page.</p><img src="/button.gif" style="margin: 10px; margin-bottom: -5px; image-rendering:pixelated!important;"><br><code onclick="copyContent()" id="code" style="margin: 10px; padding: 10px; background: gray; border-radius: 6px; display: inline-block;
+            font-size: 12px;
+            max-width: 100%;
+            margin-left: 10px;
+  white-space: pre-wrap;
+  word-break: break-all; cursor: copy;">&lt;a href="${window.location.origin}"target="_blank"&gt;&lt;img style="image-rendering:pixelated!important;"src="${window.location.origin}/button.gif"&gt;&lt;/a&gt;</code>`;
+
+        </script>
+
+    </body>
+
+</html>
