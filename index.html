@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>simonhacker312 — Developer Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #00ff88;
+    --green-dim: #00cc6a;
+    --green-dark: #00331a;
+    --cyan: #00eeff;
+    --red: #ff003c;
+    --bg: #020d06;
+    --bg2: #040f08;
+    --panel: #061209;
+    --border: #0d3d1a;
+    --text: #a0ffb8;
+    --text-dim: #4a8a60;
+    --glow: 0 0 8px #00ff88, 0 0 20px #00ff8860;
+    --glow-cyan: 0 0 8px #00eeff, 0 0 20px #00eeff60;
+    --glow-red: 0 0 8px #ff003c, 0 0 20px #ff003c60;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    width: 14px; height: 14px;
+    border: 2px solid var(--green);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 10000;
+    transition: transform 0.1s, border-color 0.2s;
+    box-shadow: var(--glow);
+  }
+  .cursor-trail {
+    width: 4px; height: 4px;
+    background: var(--green);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.5;
+    transition: 0.08s;
+  }
+
+  /* SCANLINES OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 9998;
+  }
+
+  /* NOISE TEXTURE */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.4;
+  }
+
+  /* GRID BACKGROUND */
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 40px;
+    background: rgba(2,13,6,0.9);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+  }
+
+  .nav-logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: var(--green);
+    text-shadow: var(--glow);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-logo span { color: var(--cyan); text-shadow: var(--glow-cyan); }
+
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: color 0.2s, text-shadow 0.2s;
+  }
+  .nav-links a:hover { color: var(--green); text-shadow: var(--glow); }
+
+  .nav-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: var(--green);
+  }
+  .status-dot {
+    width: 8px; height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: var(--glow);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 40px 80px;
+    z-index: 2;
+  }
+
+  .hero-content { max-width: 800px; }
+
+  .hero-tag {
+    font-size: 0.75rem;
+    color: var(--cyan);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    text-shadow: var(--glow-cyan);
+  }
+
+  .hero-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1;
+    color: var(--green);
+    text-shadow: var(--glow);
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+  }
+
+  .hero-name .at { color: var(--text-dim); font-size: 0.6em; }
+
+  .hero-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(1rem, 3vw, 1.8rem);
+    font-weight: 300;
+    color: var(--text-dim);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+
+  .hero-title .highlight { color: var(--cyan); font-weight: 700; }
+
+  .typewriter {
+    font-size: 0.9rem;
+    color: var(--green-dim);
+    margin-bottom: 50px;
+    min-height: 1.5em;
+  }
+
+  .typewriter::after {
+    content: '█';
+    animation: blink 1s infinite;
+    color: var(--green);
+  }
+
+  @keyframes blink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+
+  .hero-cta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    border: 1px solid;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-101%);
+    transition: transform 0.3s;
+  }
+
+  .btn:hover::before { transform: translateX(0); }
+  .btn span { position: relative; z-index: 1; }
+
+  .btn-primary {
+    color: var(--bg);
+    background: var(--green);
+    border-color: var(--green);
+    box-shadow: var(--glow);
+  }
+  .btn-primary::before { background: var(--cyan); }
+  .btn-primary:hover { color: var(--bg); border-color: var(--cyan); box-shadow: var(--glow-cyan); }
+
+  .btn-outline {
+    color: var(--green);
+    background: transparent;
+    border-color: var(--green);
+  }
+  .btn-outline::before { background: var(--green-dark); }
+  .btn-outline:hover { box-shadow: var(--glow); }
+
+  .btn-red {
+    color: var(--red);
+    background: transparent;
+    border-color: var(--red);
+  }
+  .btn-red::before { background: rgba(255,0,60,0.1); }
+  .btn-red:hover { box-shadow: var(--glow-red); }
+
+  /* TERMINAL DECORATION */
+  .hero-terminal {
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: min(380px, 38vw);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(0,255,136,0.08);
+    animation: floatTerm 4s ease-in-out infinite;
+  }
+
+  @keyframes floatTerm {
+    0%,100% { transform: translateY(-50%) translateY(0); }
+    50% { transform: translateY(-50%) translateY(-10px); }
+  }
+
+  .terminal-bar {
+    background: #0a1e10;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .t-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+
+  .t-dot.r { background: #ff5f57; }
+  .t-dot.y { background: #febc2e; }
+  .t-dot.g { background: #28c840; }
+
+  .terminal-title {
+    margin-left: 8px;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+  }
+
+  .terminal-body {
+    padding: 20px;
+    font-size: 0.78rem;
+    line-height: 2;
+  }
+
+  .t-line { display: block; }
+  .t-prompt { color: var(--green); }
+  .t-cmd { color: #ffffff; }
+  .t-out { color: var(--text-dim); padding-left: 12px; }
+  .t-out.g { color: var(--green); }
+  .t-out.c { color: var(--cyan); }
+  .t-out.r { color: var(--red); }
+
+  .t-line { animation: fadeInLine 0.3s both; }
+  .t-line:nth-child(1) { animation-delay: 0.3s; }
+  .t-line:nth-child(2) { animation-delay: 0.6s; }
+  .t-line:nth-child(3) { animation-delay: 0.9s; }
+  .t-line:nth-child(4) { animation-delay: 1.2s; }
+  .t-line:nth-child(5) { animation-delay: 1.5s; }
+  .t-line:nth-child(6) { animation-delay: 1.8s; }
+  .t-line:nth-child(7) { animation-delay: 2.1s; }
+  .t-line:nth-child(8) { animation-delay: 2.4s; }
+  .t-line:nth-child(9) { animation-delay: 2.7s; }
+  .t-line:nth-child(10) { animation-delay: 3.0s; }
+
+  @keyframes fadeInLine {
+    from { opacity: 0; transform: translateX(-8px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* SECTIONS */
+  section {
+    position: relative;
+    z-index: 2;
+    padding: 100px 40px;
+  }
+
+  .section-header {
+    margin-bottom: 60px;
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    color: var(--cyan);
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    text-shadow: var(--glow-cyan);
+  }
+
+  .section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 700;
+    color: var(--green);
+    text-shadow: var(--glow);
+    letter-spacing: -0.02em;
+  }
+
+  .section-line {
+    width: 80px; height: 2px;
+    background: linear-gradient(90deg, var(--green), transparent);
+    margin-top: 16px;
+    box-shadow: var(--glow);
+  }
+
+  /* SKILLS */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+
+  .skill-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .skill-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--green);
+    box-shadow: var(--glow);
+  }
+
+  .skill-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--green);
+    box-shadow: 0 8px 30px rgba(0,255,136,0.12);
+  }
+
+  .skill-icon {
+    font-size: 1.8rem;
+    margin-bottom: 14px;
+    display: block;
+    filter: drop-shadow(0 0 8px currentColor);
+  }
+
+  .skill-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    color: var(--green);
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+  }
+
+  .skill-desc {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .skill-bar-wrap {
+    margin-top: 14px;
+    background: var(--border);
+    height: 3px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .skill-bar {
+    height: 100%;
+    background: var(--green);
+    box-shadow: var(--glow);
+    border-radius: 2px;
+    animation: growBar 1.5s ease-out both;
+  }
+
+  @keyframes growBar {
+    from { width: 0; }
+  }
+
+  /* PROJECTS */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+  }
+
+  .project-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 30px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .project-card::after {
+    content: '';
+    position: absolute;
+    top: -1px; left: -1px; right: -1px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--green), var(--cyan));
+    transform: scaleX(0);
+    transition: transform 0.3s;
+    transform-origin: left;
+  }
+
+  .project-card:hover::after { transform: scaleX(1); }
+  .project-card:hover {
+    border-color: rgba(0,255,136,0.3);
+    box-shadow: 0 10px 40px rgba(0,255,136,0.08);
+  }
+
+  .project-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border: 1px solid;
+    margin-bottom: 16px;
+  }
+
+  .project-tag.roblox { color: var(--cyan); border-color: var(--cyan); }
+  .project-tag.script { color: var(--green); border-color: var(--green); }
+  .project-tag.hack { color: var(--red); border-color: var(--red); }
+
+  .project-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 12px;
+    letter-spacing: 0.03em;
+  }
+
+  .project-desc {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+
+  .project-footer {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .tech-pill {
+    font-size: 0.65rem;
+    padding: 3px 10px;
+    background: var(--green-dark);
+    color: var(--green);
+    border: 1px solid var(--border);
+    letter-spacing: 0.1em;
+  }
+
+  /* COMMISSIONS */
+  .comm-banner {
+    background: var(--panel);
+    border: 1px solid var(--green);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 0 60px rgba(0,255,136,0.03), var(--glow);
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .comm-banner::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(45deg, var(--green), var(--cyan), var(--green), var(--cyan));
+    background-size: 400%;
+    animation: borderAnim 4s linear infinite;
+    z-index: -1;
+    filter: blur(2px);
+  }
+
+  @keyframes borderAnim {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 400% 50%; }
+  }
+
+  .comm-open {
+    display: inline-block;
+    background: var(--green);
+    color: var(--bg);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 6px 20px;
+    margin-bottom: 20px;
+    animation: glowPulse 2s infinite;
+  }
+
+  @keyframes glowPulse {
+    0%,100% { box-shadow: 0 0 10px var(--green); }
+    50% { box-shadow: 0 0 30px var(--green), 0 0 60px var(--green); }
+  }
+
+  .comm-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    color: black;
+    text-shadow: var(--glow);
+    font-weight: 900;
+    margin-bottom: 12px;
+  }
+
+  .comm-sub {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    margin-bottom: 30px;
+  }
+
+  .comm-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+
+  .comm-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 24px 20px;
+    transition: all 0.3s;
+  }
+
+  .comm-card:hover {
+    border-color: var(--green);
+    box-shadow: var(--glow);
+    transform: translateY(-3px);
+  }
+
+  .comm-price {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--green);
+    text-shadow: var(--glow);
+    margin-bottom: 6px;
+  }
+
+  .comm-type {
+    font-size: 0.8rem;
+    color: var(--cyan);
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+
+  .comm-features {
+    list-style: none;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    line-height: 2;
+  }
+
+  .comm-features li::before { content: '> '; color: var(--green); }
+
+  /* CONTACT */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .contact-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    text-decoration: none;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--green-dark);
+    transform: translateX(-101%);
+    transition: transform 0.3s;
+  }
+
+  .contact-card:hover::before { transform: translateX(0); }
+  .contact-card:hover { border-color: var(--green); box-shadow: var(--glow); }
+
+  .contact-icon {
+    font-size: 2rem;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+  }
+
+  .contact-info { position: relative; z-index: 1; }
+
+  .contact-platform {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: 0.15em;
+    margin-bottom: 4px;
+  }
+
+  .contact-handle {
+    font-size: 0.85rem;
+    color: var(--text);
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 2;
+    border-top: 1px solid var(--border);
+    padding: 30px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+  }
+
+  footer .logo-sm {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--green);
+    font-size: 0.8rem;
+    font-weight: 900;
+    text-shadow: var(--glow);
+  }
+
+  /* DIVIDER */
+  .divider {
+    position: relative;
+    z-index: 2;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0 40px;
+  }
+
+  /* GLITCH effect on hover for name */
+  .hero-name:hover {
+    animation: glitch 0.3s;
+  }
+
+  @keyframes glitch {
+    0%,100% { text-shadow: var(--glow); }
+    20% { text-shadow: -2px 0 var(--cyan), var(--glow); transform: translateX(2px); }
+    40% { text-shadow: 2px 0 var(--red), var(--glow); transform: translateX(-2px); }
+    60% { text-shadow: -2px 0 var(--cyan), var(--glow); transform: translateX(1px); }
+    80% { text-shadow: var(--glow); transform: translateX(0); }
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .nav-links { display: none; }
+    section { padding: 70px 20px; }
+    .hero { padding: 100px 20px 60px; }
+    .hero-terminal { display: none; }
+    footer { flex-direction: column; gap: 10px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo"><span>//</span> SIMON<span>HACKER</span></div>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#commissions">Commissions</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-status">
+    <div class="status-dot"></div>
+    AVAILABLE FOR HIRE
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-tag">// developer.portfolio — v2.0.26</div>
+    <div class="hero-name"><span class="at">@</span>simonhacker312</div>
+    <div class="hero-title">
+      Coder &amp; <span class="highlight">Hacker</span> · Roblox <span class="highlight">Developer</span>
+    </div>
+    <div class="typewriter" id="typewriter"></div>
+    <div class="hero-cta">
+      <a href="#commissions" class="btn btn-primary"><span>⚡ Hire Me</span></a>
+      <a href="#projects" class="btn btn-outline"><span>View Work</span></a>
+      <a href="#contact" class="btn btn-red"><span>Contact</span></a>
+    </div>
+  </div>
+
+  <div class="hero-terminal">
+    <div class="terminal-bar">
+      <div class="t-dot r"></div>
+      <div class="t-dot y"></div>
+      <div class="t-dot g"></div>
+      <span class="terminal-title">simon@dev:~$</span>
+    </div>
+    <div class="terminal-body">
+      <span class="t-line"><span class="t-prompt">$ </span><span class="t-cmd">whoami</span></span>
+      <span class="t-line t-out g">simonhacker312</span>
+      <span class="t-line"><span class="t-prompt">$ </span><span class="t-cmd">cat skills.txt</span></span>
+      <span class="t-line t-out c">→ Roblox Studio &amp; Lua</span>
+      <span class="t-line t-out c">→ Scripting &amp; Systems</span>
+      <span class="t-line t-out c">→ Game Development</span>
+      <span class="t-line t-out c">→ Hacking &amp; Exploits</span>
+      <span class="t-line"><span class="t-prompt">$ </span><span class="t-cmd">status --commissions</span></span>
+      <span class="t-line t-out g">✓ OPEN — DM @simonhacker312</span>
+      <span class="t-line"><span class="t-prompt">$ </span><span class="t-cmd">_</span></span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header reveal">
+    <div class="section-label">// 01 — arsenal</div>
+    <div class="section-title">SKILLS &amp; TOOLS</div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="skills-grid">
+    <div class="skill-card reveal">
+      <span class="skill-icon" style="color:#00eeff">🎮</span>
+      <div class="skill-name">Roblox Studio</div>
+      <div class="skill-desc">Full game development in Roblox Studio — maps, systems, UI, and game logic from scratch.</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:95%"></div></div>
+    </div>
+    <div class="skill-card reveal">
+      <span class="skill-icon" style="color:#00ff88">📜</span>
+      <div class="skill-name">Lua Scripting</div>
+      <div class="skill-desc">Server &amp; client scripts, ModuleScripts, RemoteEvents, custom frameworks and data systems.</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:90%"></div></div>
+    </div>
+    <div class="skill-card reveal">
+      <span class="skill-icon" style="color:#ff003c">💀</span>
+      <div class="skill-name">Hacking &amp; Exploits</div>
+      <div class="skill-desc">Security research, exploit development, vulnerability analysis, and reverse engineering.</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:85%"></div></div>
+    </div>
+    <div class="skill-card reveal">
+      <span class="skill-icon" style="color:#00ff88">⚙️</span>
+      <div class="skill-name">Systems Design</div>
+      <div class="skill-desc">Building robust game systems — combat, inventory, quests, economy, and DataStore backends.</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:88%"></div></div>
+    </div>
+    <div class="skill-card reveal">
+      <span class="skill-icon" style="color:#00eeff">🖥️</span>
+      <div class="skill-name">UI Development</div>
+      <div class="skill-desc">Polished in-game GUIs, HUDs, menus, and animated interfaces with Roblox TweenService.</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:82%"></div></div>
+    </div>
+    <div class="skill-card reveal">
+      <span class="skill-icon" style="color:#00ff88">🔧</span>
+      <div class="skill-name">Debugging &amp; Optimization</div>
+      <div class="skill-desc">Profiling, memory optimization, fixing bugs, and squeezing max performance from any codebase.</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:87%"></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header reveal">
+    <div class="section-label">// 02 — operations</div>
+    <div class="section-title">PROJECTS</div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="projects-grid">
+    <div class="project-card reveal">
+      <span class="project-tag roblox">Roblox</span>
+      <div class="project-name">COMBAT ENGINE v3</div>
+      <div class="project-desc">Custom server-authoritative combat system with hitboxes, combos, knockback physics, and anti-exploit protection. Built for a PvP game with 1k+ daily players.</div>
+      <div class="project-footer">
+        <span class="tech-pill">Lua</span>
+        <span class="tech-pill">RemoteEvents</span>
+        <span class="tech-pill">Hitbox</span>
+      </div>
+    </div>
+    <div class="project-card reveal">
+      <span class="project-tag roblox">Roblox</span>
+      <div class="project-name">RPG QUEST SYSTEM</div>
+      <div class="project-desc">Modular quest framework with dynamic objectives, NPC dialogues, reward distribution, and persistent DataStore saving. Fully reusable across games.</div>
+      <div class="project-footer">
+        <span class="tech-pill">ModuleScript</span>
+        <span class="tech-pill">DataStore</span>
+        <span class="tech-pill">NPC AI</span>
+      </div>
+    </div>
+    <div class="project-card reveal">
+      <span class="project-tag hack">Security</span>
+      <div class="project-name">EXPLOIT RESEARCH</div>
+      <div class="project-desc">Security vulnerability research and analysis. Understanding exploit techniques to build better anti-cheat systems and protect game integrity.</div>
+      <div class="project-footer">
+        <span class="tech-pill">Analysis</span>
+        <span class="tech-pill">Anti-Cheat</span>
+        <span class="tech-pill">Research</span>
+      </div>
+    </div>
+    <div class="project-card reveal">
+      <span class="project-tag roblox">Roblox</span>
+      <div class="project-name">ECONOMY SIMULATOR</div>
+      <div class="project-desc">Full in-game economy with shops, trading, currency systems, and leaderboard tracking. Includes anti-dupe and transaction logging.</div>
+      <div class="project-footer">
+        <span class="tech-pill">Economy</span>
+        <span class="tech-pill">DataStore2</span>
+        <span class="tech-pill">UI</span>
+      </div>
+    </div>
+    <div class="project-card reveal">
+      <span class="project-tag script">Script</span>
+      <div class="project-name">ADMIN FRAMEWORK</div>
+      <div class="project-desc">Custom admin command system with permission levels, logging, remote execution, and a sleek in-game UI panel for server management.</div>
+      <div class="project-footer">
+        <span class="tech-pill">Commands</span>
+        <span class="tech-pill">Permissions</span>
+        <span class="tech-pill">Logging</span>
+      </div>
+    </div>
+    <div class="project-card reveal">
+      <span class="project-tag roblox">Roblox</span>
+      <div class="project-name">CUSTOM MAP BUILDS</div>
+      <div class="project-desc">Detailed environment design in Roblox Studio — from arena maps to open-world zones with custom terrain, lighting, and atmospheric effects.</div>
+      <div class="project-footer">
+        <span class="tech-pill">Studio</span>
+        <span class="tech-pill">Terrain</span>
+        <span class="tech-pill">Lighting</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- COMMISSIONS -->
+<section id="commissions">
+  <div class="section-header reveal">
+    <div class="section-label">// 03 — contracts</div>
+    <div class="section-title">COMMISSIONS</div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="comm-banner reveal">
+    <div class="comm-open">● COMMISSIONS OPEN</div>
+    <div class="comm-title">READY TO BUILD YOUR VISION</div>
+    <div class="comm-sub">Fast delivery · Clean code · Professional results · Discord preferred</div>
+  </div>
+
+  <div class="comm-cards reveal">
+    <div class="comm-card">
+      <div class="comm-price">STARTER</div>
+      <div class="comm-type">Basic Scripts &amp; Systems</div>
+      <ul class="comm-features">
+        <li>Simple game mechanic</li>
+        <li>Basic UI elements</li>
+        <li>Quick turnaround</li>
+        <li>1 revision round</li>
+      </ul>
+    </div>
+    <div class="comm-card">
+      <div class="comm-price">STANDARD</div>
+      <div class="comm-type">Game Systems &amp; Features</div>
+      <ul class="comm-features">
+        <li>Full game system</li>
+        <li>DataStore integration</li>
+        <li>Polished UI</li>
+        <li>2 revision rounds</li>
+      </ul>
+    </div>
+    <div class="comm-card">
+      <div class="comm-price">PREMIUM</div>
+      <div class="comm-type">Full Game Development</div>
+      <ul class="comm-features">
+        <li>Complete game build</li>
+        <li>Custom systems + map</li>
+        <li>Anti-exploit setup</li>
+        <li>Unlimited revisions</li>
+      </ul>
+    </div>
+    <div class="comm-card">
+      <div class="comm-price">CUSTOM</div>
+      <div class="comm-type">Talk to Me First</div>
+      <ul class="comm-features">
+        <li>Anything Roblox</li>
+        <li>Security research</li>
+        <li>Scripting &amp; builds</li>
+        <li>Price on request</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header reveal">
+    <div class="section-label">// 04 — connect</div>
+    <div class="section-title">REACH OUT</div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="contact-grid">
+    <a class="contact-card reveal" href="https://discord.com/users/simonhacker312" target="_blank">
+      <div class="contact-icon">💬</div>
+      <div class="contact-info">
+        <div class="contact-platform">Discord — Preferred</div>
+        <div class="contact-handle">@simonhacker312</div>
+      </div>
+    </a>
+    <a class="contact-card reveal" href="https://www.roblox.com/users/builder65213/profile" target="_blank">
+      <div class="contact-icon">🎮</div>
+      <div class="contact-info">
+        <div class="contact-platform">Roblox Profile</div>
+        <div class="contact-handle">@builder65213</div>
+      </div>
+    </a>
+  </div>
+
+  <div style="text-align:center; margin-top: 50px; color: var(--text-dim); font-size: 0.8rem; line-height: 2; position:relative; z-index:2;" class="reveal">
+    <div style="color:var(--green); font-family:'Orbitron',sans-serif; font-size:0.9rem; margin-bottom:8px;">FASTEST RESPONSE ON DISCORD</div>
+    DM @simonhacker312 with your project details and budget.<br>
+    Usually responds within a few hours.
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo-sm">// SIMONHACKER312</div>
+  <div>Built with code · Powered by caffeine</div>
+  <div style="color:var(--green);">© 2026</div>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const trail = document.getElementById('cursorTrail');
+  let mx = 0, my = 0, tx = 0, ty = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = (mx - 7) + 'px';
+    cursor.style.top = (my - 7) + 'px';
+  });
+  setInterval(() => {
+    tx += (mx - tx) * 0.18;
+    ty += (my - ty) * 0.18;
+    trail.style.left = (tx - 2) + 'px';
+    trail.style.top = (ty - 2) + 'px';
+  }, 16);
+
+  // Typewriter
+  const phrases = [
+    'Building Roblox games that actually slap.',
+    'Writing clean Lua like it\'s poetry.',
+    'Breaking things to understand them.',
+    'Taking commissions — DM me.',
+    'if not me then who?'
+  ];
+  let pi = 0, ci = 0, del = false;
+  const tw = document.getElementById('typewriter');
+  function type() {
+    const phrase = phrases[pi];
+    if (!del) {
+      if (ci < phrase.length) {
+        tw.textContent = phrase.slice(0, ++ci);
+        setTimeout(type, 60);
+      } else {
+        setTimeout(() => { del = true; type(); }, 2000);
+      }
+    } else {
+      if (ci > 0) {
+        tw.textContent = phrase.slice(0, --ci);
+        setTimeout(type, 30);
+      } else {
+        del = false;
+        pi = (pi + 1) % phrases.length;
+        setTimeout(type, 400);
+      }
+    }
+  }
+  type();
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  revealEls.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
