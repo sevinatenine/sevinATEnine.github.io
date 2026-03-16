@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>builder65213 — Roblox Dev Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --red: #ff3b3b;
+      --bg: #080a0f;
+      --bg2: #0d1119;
+      --bg3: #131a26;
+      --grid: #1a2235;
+      --text: #e8edf5;
+      --muted: #7a8ba3;
+      --accent: #00d4ff;
+      --accent2: #ff6b00;
+      --gold: #ffd166;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Mono', monospace;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    /* SCANLINES */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* GRID BG */
+    .grid-bg {
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 48px;
+      background: rgba(8,10,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--grid);
+    }
+    .nav-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 1.1rem;
+      color: var(--accent);
+      letter-spacing: 2px;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--red); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.72rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(0,212,255,0.12) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      animation: pulse-glow 4s ease-in-out infinite;
+    }
+    .hero-glow2 {
+      position: absolute;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(255,59,59,0.1) 0%, transparent 70%);
+      top: 30%; left: 20%;
+      pointer-events: none;
+      animation: pulse-glow2 6s ease-in-out infinite;
+    }
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+      50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+    }
+    @keyframes pulse-glow2 {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.15); }
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.68rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(0,212,255,0.3);
+      padding: 6px 18px;
+      border-radius: 2px;
+      margin-bottom: 28px;
+      animation: fadeUp 0.8s ease both;
+    }
+    .hero h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2.8rem, 8vw, 6.5rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -2px;
+      margin-bottom: 12px;
+      animation: fadeUp 0.9s 0.1s ease both;
+    }
+    .hero h1 .at { color: var(--muted); font-size: 0.6em; }
+    .hero h1 .accent { color: var(--accent); }
+    .hero-sub {
+      font-size: 0.85rem;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 48px;
+      animation: fadeUp 1s 0.2s ease both;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 48px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 52px;
+      animation: fadeUp 1s 0.3s ease both;
+    }
+    .stat { display: flex; flex-direction: column; align-items: center; }
+    .stat-num {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .stat-num.gold { color: var(--gold); }
+    .stat-num.red { color: var(--red); }
+    .stat-label {
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    .hero-btns {
+      display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+      animation: fadeUp 1s 0.4s ease both;
+    }
+    .btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 14px 32px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.2s;
+      position: relative;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+      font-weight: 700;
+    }
+    .btn-primary:hover { background: #33ddff; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,212,255,0.35); }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--grid);
+    }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* GLITCH */
+    .glitch { position: relative; display: inline-block; }
+    .glitch::before, .glitch::after {
+      content: attr(data-text);
+      position: absolute; top: 0; left: 0; width: 100%;
+      font-family: 'Orbitron', sans-serif; font-weight: 900;
+    }
+    .glitch::before {
+      color: var(--red);
+      animation: glitch1 4s infinite;
+      clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%);
+    }
+    .glitch::after {
+      color: var(--accent);
+      animation: glitch2 4s infinite;
+      clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+    }
+    @keyframes glitch1 {
+      0%,88%,100% { transform: translate(0); opacity: 0; }
+      90% { transform: translate(-3px, 1px); opacity: 0.7; }
+      92% { transform: translate(3px, -1px); opacity: 0.7; }
+      94% { transform: translate(0); opacity: 0; }
+    }
+    @keyframes glitch2 {
+      0%,88%,100% { transform: translate(0); opacity: 0; }
+      91% { transform: translate(3px, 2px); opacity: 0.7; }
+      93% { transform: translate(-3px, -2px); opacity: 0.7; }
+      95% { transform: translate(0); opacity: 0; }
+    }
+
+    /* SECTION */
+    section {
+      position: relative; z-index: 1;
+      padding: 100px 48px;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .section-label {
+      font-size: 0.65rem; letter-spacing: 4px; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .section-label::before {
+      content: ''; display: block; width: 32px; height: 1px; background: var(--accent);
+    }
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.6rem, 4vw, 2.8rem);
+      font-weight: 900; letter-spacing: -1px;
+      margin-bottom: 60px; line-height: 1.1;
+    }
+    .section-title span { color: var(--accent); }
+
+    .divider {
+      width: 100%; height: 1px; position: relative; z-index: 1;
+      background: linear-gradient(90deg, transparent, var(--grid), var(--accent), var(--grid), transparent);
+    }
+
+    /* SKILLS */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .skill-card {
+      background: var(--bg2); border: 1px solid var(--grid);
+      padding: 28px; position: relative; transition: all 0.25s; overflow: hidden;
+    }
+    .skill-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--red));
+      transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+    }
+    .skill-card:hover::before { transform: scaleX(1); }
+    .skill-card:hover {
+      border-color: rgba(0,212,255,0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+    }
+    .skill-icon { font-size: 2rem; margin-bottom: 14px; }
+    .skill-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem; font-weight: 700; letter-spacing: 1px;
+      margin-bottom: 8px; color: var(--text);
+    }
+    .skill-desc { font-size: 0.72rem; color: var(--muted); line-height: 1.7; }
+    .skill-tag {
+      display: inline-block; margin-top: 14px;
+      font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase;
+      padding: 3px 10px; border: 1px solid rgba(0,212,255,0.25); color: var(--accent);
+    }
+
+    /* VIDEOS */
+    .videos-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
+    }
+    .video-card {
+      background: var(--bg2); border: 1px solid var(--grid);
+      overflow: hidden; position: relative; transition: all 0.25s;
+    }
+    .video-card:hover {
+      border-color: rgba(0,212,255,0.4);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      transform: translateY(-4px);
+    }
+    .video-placeholder {
+      position: relative; background: var(--bg3);
+      aspect-ratio: 16/9;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 12px;
+      overflow: hidden; cursor: pointer;
+    }
+    .video-placeholder::before {
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(0,212,255,0.02) 20px, rgba(0,212,255,0.02) 40px);
+    }
+    .corner {
+      position: absolute; width: 20px; height: 20px;
+      border-color: var(--accent); border-style: solid; opacity: 0.5;
+    }
+    .corner.tl { top: 10px; left: 10px; border-width: 2px 0 0 2px; }
+    .corner.tr { top: 10px; right: 10px; border-width: 2px 2px 0 0; }
+    .corner.bl { bottom: 10px; left: 10px; border-width: 0 0 2px 2px; }
+    .corner.br { bottom: 10px; right: 10px; border-width: 0 2px 2px 0; }
+    .play-btn {
+      width: 60px; height: 60px;
+      background: rgba(0,212,255,0.1);
+      border: 2px solid var(--accent); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; z-index: 1; transition: all 0.2s;
+    }
+    .play-btn::after {
+      content: ''; width: 0; height: 0; border-style: solid;
+      border-width: 9px 0 9px 18px;
+      border-color: transparent transparent transparent var(--accent);
+      margin-left: 4px;
+    }
+    .video-placeholder:hover .play-btn {
+      background: rgba(0,212,255,0.25);
+      box-shadow: 0 0 30px rgba(0,212,255,0.4);
+      transform: scale(1.1);
+    }
+    .video-label-placeholder {
+      font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--muted); position: relative; z-index: 1;
+    }
+    .video-embed { width: 100%; aspect-ratio: 16/9; border: none; display: block; }
+    .video-info { padding: 20px 22px; }
+    .video-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.82rem; font-weight: 700; letter-spacing: 1px;
+      margin-bottom: 6px; color: var(--text);
+    }
+    .video-meta { font-size: 0.65rem; color: var(--muted); letter-spacing: 1px; }
+    .video-num {
+      position: absolute; top: 12px; left: 14px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem; font-weight: 900; color: var(--accent); opacity: 0.7; z-index: 2;
+    }
+
+    /* PRICING */
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px;
+    }
+    .price-card {
+      background: var(--bg2); border: 1px solid var(--grid);
+      padding: 36px 28px; position: relative; transition: all 0.25s; overflow: hidden;
+    }
+    .price-card.featured {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, var(--bg2), rgba(0,212,255,0.05));
+    }
+    .price-card.featured::after {
+      content: 'POPULAR';
+      position: absolute; top: 18px; right: -22px;
+      font-size: 0.55rem; letter-spacing: 2px;
+      background: var(--accent); color: var(--bg);
+      font-weight: 700; padding: 4px 28px; transform: rotate(45deg);
+    }
+    .price-card:hover:not(.featured) { border-color: rgba(0,212,255,0.3); transform: translateY(-4px); }
+    .price-card.featured:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,212,255,0.15); }
+    .price-tier { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+    .price-amount {
+      font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900;
+      color: var(--text); margin-bottom: 6px; line-height: 1;
+    }
+    .price-amount span { font-size: 0.85rem; color: var(--muted); }
+    .price-desc { font-size: 0.7rem; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+    .price-features { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .price-features li {
+      font-size: 0.72rem; color: var(--text);
+      display: flex; gap: 10px; align-items: flex-start; line-height: 1.5;
+    }
+    .price-features li::before { content: '▸'; color: var(--accent); flex-shrink: 0; margin-top: 1px; }
+    .price-cta { margin-top: 28px; display: block; text-align: center; }
+
+    /* CHEAP CALLOUT */
+    .cheap-callout {
+      background: linear-gradient(135deg, rgba(255,209,102,0.07), rgba(255,107,0,0.05));
+      border: 1px solid rgba(255,209,102,0.22);
+      padding: 28px 32px; margin-top: 48px; position: relative; overflow: hidden;
+    }
+    .cheap-callout::before {
+      content: '💰'; position: absolute; right: 24px; top: 50%;
+      transform: translateY(-50%); font-size: 3.5rem; opacity: 0.12;
+    }
+    .cheap-callout p { font-size: 0.82rem; color: var(--gold); line-height: 1.7; margin: 0; }
+    .cheap-callout strong {
+      font-family: 'Orbitron', sans-serif; font-size: 0.9rem;
+      display: block; margin-bottom: 6px; color: var(--gold);
+    }
+
+    /* CONTACT */
+    .contact-wrap {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start;
+    }
+    .contact-text p {
+      font-size: 0.82rem; color: var(--muted); line-height: 1.9; margin-bottom: 24px;
+    }
+    .contact-badges { display: flex; flex-direction: column; gap: 14px; }
+    .contact-badge {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--bg2); border: 1px solid var(--grid);
+      padding: 16px 20px; transition: all 0.2s;
+      text-decoration: none; color: inherit;
+    }
+    .contact-badge:hover { border-color: var(--accent); transform: translateX(6px); }
+    .badge-icon { font-size: 1.4rem; }
+    .badge-label { font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+    .badge-value { font-family: 'Orbitron', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--accent); }
+    .badge-value.green { color: #00ff99; }
+
+    /* FOOTER */
+    footer {
+      position: relative; z-index: 1; text-align: center;
+      padding: 40px 24px; border-top: 1px solid var(--grid);
+      font-size: 0.65rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase;
+    }
+    footer span { color: var(--accent); }
+
+    /* REVEAL */
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* CURSOR */
+    .cursor-dot {
+      width: 8px; height: 8px; background: var(--accent);
+      border-radius: 50%; position: fixed; pointer-events: none;
+      z-index: 10000; transform: translate(-50%, -50%);
+      transition: transform 0.08s; mix-blend-mode: screen;
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 14px 20px; }
+      .nav-links { display: none; }
+      section { padding: 70px 20px; }
+      .videos-grid { grid-template-columns: 1fr; }
+      .contact-wrap { grid-template-columns: 1fr; gap: 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="cursor-dot" id="cursor"></div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#"><span>//</span> builder65213</a>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+
+  <div class="hero-tag">Roblox Developer &amp; Scripter</div>
+
+  <h1>
+    <span class="at">@</span><span class="glitch" data-text="builder65213">builder</span><span class="accent">65213</span>
+  </h1>
+
+  <p class="hero-sub">Scripting &nbsp;·&nbsp; UI &nbsp;·&nbsp; Game Dev &nbsp;·&nbsp; Datastores &nbsp;·&nbsp; Gamepasses</p>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">4</div>
+      <div class="stat-label">Years Experience</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num gold">8+</div>
+      <div class="stat-label">Skills Mastered</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num red">LOW</div>
+      <div class="stat-label">Prices</div>
+    </div>
+  </div>
+
+  <div class="hero-btns">
+    <a href="#work" class="btn btn-primary">View My Work</a>
+    <a href="#contact" class="btn btn-secondary">Hire Me</a>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <p class="section-label">What I do</p>
+  <h2 class="section-title">My <span>Skills</span></h2>
+
+  <div class="skills-grid">
+    <div class="skill-card reveal">
+      <div class="skill-icon">🗄️</div>
+      <div class="skill-name">Datastores</div>
+      <div class="skill-desc">Custom save systems using Roblox DataStoreService. Player data that persists reliably across sessions — stats, inventory, settings and more.</div>
+      <span class="skill-tag">DataStoreService</span>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">📦</div>
+      <div class="skill-name">ModuleScripts</div>
+      <div class="skill-desc">Clean, reusable code with ModuleScripts. Organized architecture that keeps your game maintainable and scalable as it grows.</div>
+      <span class="skill-tag">OOP · Clean Code</span>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">🏆</div>
+      <div class="skill-name">Leaderstats</div>
+      <div class="skill-desc">Leaderboards, stat tracking, and player rankings. Custom stat systems tied into datastores for fully persistent progression.</div>
+      <span class="skill-tag">Leaderboards</span>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">🎬</div>
+      <div class="skill-name">Animations</div>
+      <div class="skill-desc">Scripted animation controllers, Animation Tracks, blending, and event triggers. Bringing characters and objects to life smoothly.</div>
+      <span class="skill-tag">AnimationController</span>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">🖥️</div>
+      <div class="skill-name">UI Development</div>
+      <div class="skill-desc">Full UI scripting and design — menus, HUDs, popups, tween animations, and responsive layouts that look polished in-game.</div>
+      <span class="skill-tag">ScreenGui · Tweens</span>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">💎</div>
+      <div class="skill-name">Gamepasses</div>
+      <div class="skill-desc">Complete gamepass systems with purchase prompts, MarketplaceService integration, benefit delivery, and receipt handlers.</div>
+      <span class="skill-tag">MarketplaceService</span>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">🎮</div>
+      <div class="skill-name">Game Development</div>
+      <div class="skill-desc">Full game dev collaboration — I can join your team and help build systems, fix bugs, and bring your game idea to life from the ground up.</div>
+      <span class="skill-tag">Full Dev Support</span>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">⚙️</div>
+      <div class="skill-name">General Scripting</div>
+      <div class="skill-desc">Remote Events, BindableEvents, server/client architecture, loops, custom tools, combat systems, and whatever else your game needs.</div>
+      <span class="skill-tag">Lua · RemoteEvents</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WORK / VIDEOS -->
+<section id="work">
+  <p class="section-label">Portfolio</p>
+  <h2 class="section-title">My <span>Work</span></h2>
+
+  <div class="videos-grid">
+
+    <!-- VIDEO 1 -->
+    <div class="video-card reveal">
+      <div class="video-num">01</div>
+      <!--
+        ═══════════════════════════════════════════════════
+        TO ADD YOUR VIDEO HERE:
+        Delete the <div class="video-placeholder">...</div>
+        and replace it with:
+        <iframe class="video-embed" src="YOUR_EMBED_URL" allowfullscreen></iframe>
+
+        YouTube embed URL format:
+          https://www.youtube.com/embed/VIDEO_ID
+        Streamable embed URL format:
+          https://streamable.com/e/VIDEO_ID
+        ═══════════════════════════════════════════════════
+      -->
+      <div class="video-placeholder">
+        <div class="corner tl"></div><div class="corner tr"></div>
+        <div class="corner bl"></div><div class="corner br"></div>
+        <div class="play-btn"></div>
+        <div class="video-label-placeholder">Add video URL in the HTML</div>
+      </div>
+      <div class="video-info">
+        <div class="video-title">Project #1 — Title Here</div>
+        <div class="video-meta">Short description of what this clip demonstrates</div>
+      </div>
+    </div>
+
+    <!-- VIDEO 2 -->
+    <div class="video-card reveal">
+      <div class="video-num">02</div>
+      <div class="video-placeholder">
+        <div class="corner tl"></div><div class="corner tr"></div>
+        <div class="corner bl"></div><div class="corner br"></div>
+        <div class="play-btn"></div>
+        <div class="video-label-placeholder">Add video URL in the HTML</div>
+      </div>
+      <div class="video-info">
+        <div class="video-title">Project #2 — Title Here</div>
+        <div class="video-meta">Short description of what this clip demonstrates</div>
+      </div>
+    </div>
+
+    <!-- VIDEO 3 -->
+    <div class="video-card reveal">
+      <div class="video-num">03</div>
+      <div class="video-placeholder">
+        <div class="corner tl"></div><div class="corner tr"></div>
+        <div class="corner bl"></div><div class="corner br"></div>
+        <div class="play-btn"></div>
+        <div class="video-label-placeholder">Add video URL in the HTML</div>
+      </div>
+      <div class="video-info">
+        <div class="video-title">Project #3 — Title Here</div>
+        <div class="video-meta">Short description of what this clip demonstrates</div>
+      </div>
+    </div>
+
+    <!-- VIDEO 4 -->
+    <div class="video-card reveal">
+      <div class="video-num">04</div>
+      <div class="video-placeholder">
+        <div class="corner tl"></div><div class="corner tr"></div>
+        <div class="corner bl"></div><div class="corner br"></div>
+        <div class="play-btn"></div>
+        <div class="video-label-placeholder">Add video URL in the HTML</div>
+      </div>
+      <div class="video-info">
+        <div class="video-title">Project #4 — Title Here</div>
+        <div class="video-meta">Short description of what this clip demonstrates</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PRICING -->
+<section id="pricing">
+  <p class="section-label">Commissions</p>
+  <h2 class="section-title">Affordable <span>Pricing</span></h2>
+
+  <div class="pricing-grid">
+    <div class="price-card reveal">
+      <div class="price-tier">Starter</div>
+      <div class="price-amount">Cheap <span>/ negotiable</span></div>
+      <div class="price-desc">Small scripts and simple systems. Great for quick fixes or a single feature.</div>
+      <ul class="price-features">
+        <li>Single script or system</li>
+        <li>Leaderstats setup</li>
+        <li>Basic UI scripting</li>
+        <li>Bug fixes</li>
+        <li>Quick turnaround</li>
+      </ul>
+      <a href="#contact" class="btn btn-secondary price-cta">Get a Quote</a>
+    </div>
+
+    <div class="price-card featured reveal">
+      <div class="price-tier">Standard</div>
+      <div class="price-amount">Budget <span>/ negotiable</span></div>
+      <div class="price-desc">Multi-system commissions, datastores, gamepasses, and full UI builds.</div>
+      <ul class="price-features">
+        <li>Datastore save systems</li>
+        <li>Gamepass integration</li>
+        <li>Full UI with tweens</li>
+        <li>ModuleScript architecture</li>
+        <li>Animation scripting</li>
+        <li>Revisions included</li>
+      </ul>
+      <a href="#contact" class="btn btn-primary price-cta">Get a Quote</a>
+    </div>
+
+    <div class="price-card reveal">
+      <div class="price-tier">Collab</div>
+      <div class="price-amount">Let's Talk <span>/ flexible</span></div>
+      <div class="price-desc">Long-term game development collaboration. Join your team and help build the whole project.</div>
+      <ul class="price-features">
+        <li>Full game dev support</li>
+        <li>Ongoing scripting</li>
+        <li>System design input</li>
+        <li>Long-term availability</li>
+        <li>Flexible arrangements</li>
+      </ul>
+      <a href="#contact" class="btn btn-secondary price-cta">Get a Quote</a>
+    </div>
+  </div>
+
+  <div class="cheap-callout reveal">
+    <p>
+      <strong>💰 Beginner-Friendly Prices</strong>
+      I haven't done many commissions yet, so I keep my prices very low compared to other developers. You get quality Roblox scripting without breaking the bank — all prices are negotiable. Just reach out and we'll work something out!
+    </p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <p class="section-label">Get in touch</p>
+  <h2 class="section-title">Hire <span>Me</span></h2>
+
+  <div class="contact-wrap">
+    <div class="contact-text reveal">
+      <p>
+        Looking for a reliable Roblox scripter who won't charge an arm and a leg? I'm your guy. Whether you need a quick script, a full game system, or a long-term dev partner — I'm available and ready to help bring your game to life.
+      </p>
+      <p>
+        Hit me up on Discord or find me on Roblox. I respond fast and I'm always happy to chat about your project before committing to anything.
+      </p>
+      <p style="color: var(--text); font-size: 0.78rem;">
+        ✅ &nbsp;Open for commissions &nbsp;·&nbsp; All budgets welcome
+      </p>
+    </div>
+
+    <div class="contact-badges reveal">
+      <a href="https://www.roblox.com/search/users?keyword=builder65213" target="_blank" class="contact-badge">
+        <div class="badge-icon">🎮</div>
+        <div>
+          <div class="badge-label">Roblox Profile</div>
+          <div class="badge-value">@builder65213</div>
+        </div>
+      </a>
+      <div class="contact-badge">
+        <div class="badge-icon">💬</div>
+        <div>
+          <div class="badge-label">Discord</div>
+          <div class="badge-value">@simonhacker312</div>
+        </div>
+      </div>
+      <div class="contact-badge" style="cursor: default;">
+        <div class="badge-icon">⏱️</div>
+        <div>
+          <div class="badge-label">Response Time</div>
+          <div class="badge-value">Usually Fast</div>
+        </div>
+      </div>
+      <div class="contact-badge" style="cursor: default;">
+        <div class="badge-icon">🟢</div>
+        <div>
+          <div class="badge-label">Status</div>
+          <div class="badge-value green">Open for Commissions</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>@builder65213</span> &nbsp;·&nbsp; Roblox Developer &nbsp;·&nbsp; Discord: <span>@simonhacker312</span>
+</footer>
+
+<script>
+  // Cursor dot
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+  });
+
+  // Scroll reveal with stagger
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    let delay = 0;
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), delay);
+        delay += 80;
+      }
+    });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
