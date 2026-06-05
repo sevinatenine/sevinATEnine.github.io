@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Windows Update</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0078d7;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    user-select: none;
+  }
+  .spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(255,255,255,0.3);
+    border-top: 4px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 40px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  h1 { font-size: 28px; font-weight: 300; margin-bottom: 16px; }
+  .percent { font-size: 18px; font-weight: 300; margin-bottom: 40px; }
+  .bar-track {
+    width: 300px;
+    height: 4px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 2px;
+    margin-bottom: 40px;
+  }
+  .bar-fill {
+    height: 100%;
+    background: white;
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  .sub { font-size: 13px; color: rgba(255,255,255,0.7); }
+  .dont { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 12px; }
+</style>
+</head>
+<body>
+  <div class="spinner"></div>
+  <h1>Working on updates</h1>
+  <div class="percent" id="pct">0% complete</div>
+  <div class="bar-track"><div class="bar-fill" id="bar"></div></div>
+  <div class="sub">Don't turn off your PC. This will take a while.</div>
+  <div class="dont" id="msg">Your PC will restart several times.</div>
+<script>
+  const stages = [
+    { max: 30, speed: 800, msg: "Your PC will restart several times." },
+    { max: 49, speed: 1200, msg: "Installing updates... please wait." },
+    { max: 49, speed: 0, msg: "Getting things ready..." },
+    { max: 74, speed: 900, msg: "Still working on updates." },
+    { max: 94, speed: 1500, msg: "Almost there, hang tight." },
+    { max: 99, speed: 2500, msg: "Finishing up..." },
+  ];
+  let pct = 0;
+  let stage = 0;
+  function tick() {
+    if (stage >= stages.length) {
+      setTimeout(() => { pct = 0; stage = 0; document.getElementById('bar').style.transition='none'; document.getElementById('bar').style.width='0%'; setTimeout(()=>{ document.getElementById('bar').style.transition='width 0.5s ease'; tick(); }, 100); }, 2000);
+      return;
+    }
+    const s = stages[stage];
+    if (pct >= s.max) {
+      if (s.speed === 0) { setTimeout(() => { stage++; tick(); }, 4000); return; }
+      stage++;
+      tick();
+      return;
+    }
+    document.getElementById('msg').textContent = s.msg;
+    pct++;
+    document.getElementById('pct').textContent = pct + '% complete';
+    document.getElementById('bar').style.width = pct + '%';
+    setTimeout(tick, s.speed + Math.random() * 400);
+  }
+  tick();
+</script>
+</body>
+</html>
