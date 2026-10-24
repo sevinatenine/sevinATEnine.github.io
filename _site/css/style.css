@@ -1,0 +1,62 @@
+:root {
+  --bg: #fff;
+  --fg: #1a1a1a;
+  --muted: #6b6b6b;
+  --line: #e3e3e3;
+  --accent: #2b5fd9;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141414;
+    --fg: #e8e8e8;
+    --muted: #9a9a9a;
+    --line: #2c2c2c;
+    --accent: #7aa2ff;
+  }
+}
+
+body {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
+  font: 1.05rem/1.6 system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+a { color: var(--accent); }
+nav { display: flex; gap: 1rem; padding-bottom: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--line); }
+nav a { text-decoration: none; font-weight: 600; }
+h1 { line-height: 1.2; }
+img { max-width: 100%; height: auto; }
+pre { overflow-x: auto; padding: 1rem; background: var(--line); border-radius: 6px; }
+code { font-size: 0.9em; }
+
+.meta { color: var(--muted); font-size: 0.9rem; }
+.hero { width: 100%; border-radius: 8px; margin: 1rem 0; }
+
+.status {
+  padding: 0.1rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+.status-finished { color: #2a9d4b; border-color: currentColor; }
+.status-in-progress { color: #c77d00; border-color: currentColor; }
+
+.links { display: flex; gap: 0.5rem; }
+.links a {
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  text-decoration: none;
+}
+.links a:hover { border-color: var(--accent); }
+
+.grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); }
+.card { border: 1px solid var(--line); border-radius: 8px; padding: 1rem; }
+.card:hover { border-color: var(--accent); }
+.card h2 { margin: 0.5rem 0 0.25rem; font-size: 1.15rem; }
+.card h2 a { text-decoration: none; }
+.card img { border-radius: 4px; }
+.card p { margin: 0.25rem 0; }

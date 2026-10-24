@@ -1,0 +1,16 @@
+---
+layout: base.njk
+title: Projects
+permalink: /projects/
+---
+<h1>Projects</h1>
+<div class="grid">
+  {% for p in collections.projects | reverse %}
+    <article class="card">
+        {% if p.data.image %}<img src="{{ p.data.image }}" alt="" loading="lazy">{% endif %}
+        <h2><a href="{{ p.url }}">{{ p.data.title }}</a></h2>
+        <p class="meta"><span class="status status-{{ 'finished' if p.data.status == 'finished' else 'in-progress' }}">{{ "Finished" if p.data.status == "finished" else "In progress" }}</span></p>
+        <p>{{ p.data.summary }}</p>
+    </article>
+    {% endfor %}
+</div>

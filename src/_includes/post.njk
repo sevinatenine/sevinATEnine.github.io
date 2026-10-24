@@ -1,0 +1,8 @@
+---
+layout: base.njk
+---
+<a href="/blog/">← All posts</a>
+<h1>{{ title }}</h1>
+{% if image %}<img src="{{ image }}" alt="{{ imageAlt or title }}" class="hero">{% endif %}
+<time datetime="{{ page.date.toISOString() }}">{{ page.date.toDateString() }}</time>
+{{ content | safe }}

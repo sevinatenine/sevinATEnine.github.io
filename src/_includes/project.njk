@@ -1,0 +1,21 @@
+---
+layout: base.njk
+---
+<a href="/projects/">← All projects</a>
+<h1>{{ title }}</h1>
+
+<p class="meta">
+  <span class="status status-{{ 'finished' if status == 'finished' else 'in-progress' }}">{{ "Finished" if status == "finished" else "In progress" }}</span>
+  {% if started %}· Started {{ started | date }}{% endif %}
+  {% if finished %}· Finished {{ finished | date }}{% endif %}
+</p>
+
+{% if image %}<img src="{{ image }}" alt="{{ imageAlt or title }}" class="hero">{% endif %}
+
+<p class="links">
+  {% if repo %}<a href="{{ repo }}">Repo</a>{% endif %}
+  {% if demo %}<a href="{{ demo }}">Demo</a>{% endif %}
+  {% if package %}<a href="{{ package }}">Package</a>{% endif %}
+</p>
+
+{{ content | safe }}
